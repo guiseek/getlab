@@ -1,6 +1,6 @@
 <mat-card>
   <form class="row" [formGroup]="previewForm">
-    <mat-form-field class="col">
+    <mat-form-field class="col" appearance="outline">
       <mat-label>Período</mat-label>
       <mat-date-range-input [formGroup]="previewForm" [rangePicker]="picker">
         <input
@@ -26,7 +26,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="col">
+    <mat-form-field class="col" appearance="outline">
       <mat-label>Reservas</mat-label>
       <mat-select #scheduleRef formControlName="schedules" multiple>
         <mat-select-trigger>
@@ -100,7 +100,7 @@
 
     <ng-container matColumnDef="goal">
       <th mat-header-cell *matHeaderCellDef>Finalidade</th>
-      <td mat-cell *matCellDef="let element">{{ element.goal | goal }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.goal }}</td>
     </ng-container>
 
     <!-- <ng-container matColumnDef="remove">

@@ -21,10 +21,6 @@ import {ScheduleStore, TeamStore} from './shared/store'
         [opened]="(isHandset$ | async) === false"
       >
         <mat-toolbar>Menu</mat-toolbar>
-        <mat-action-list>
-          <button mat-list-item (click)="openTeamForm()">Turma</button>
-          <button mat-list-item (click)="openScheduleForm()">Reserva</button>
-        </mat-action-list>
         <mat-divider></mat-divider>
         <mat-nav-list>
           <a mat-list-item routerLink="/dashboard" routerLinkActive="active"
@@ -34,6 +30,11 @@ import {ScheduleStore, TeamStore} from './shared/store'
             >Visualizar</a
           >
         </mat-nav-list>
+        <mat-divider></mat-divider>
+        <mat-action-list>
+          <button mat-list-item (click)="openTeamForm()">Turma</button>
+          <button mat-list-item (click)="openScheduleForm()">Reserva</button>
+        </mat-action-list>
       </mat-sidenav>
       <mat-sidenav-content>
         <mat-toolbar color="primary">

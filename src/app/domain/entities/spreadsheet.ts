@@ -26,7 +26,7 @@ export class Spreadsheet {
 
   #parse(rows: PreviewRow[]) {
     const parsedRows = rows.map(({date, time, team, people, goal}) => {
-      return `${date.toDateString()},${time},${team},${people},${goal}`
+      return `${date.toLocaleDateString()},${time},${team},${people},${goal}`
     })
     const headerRow = `Data,Horário (Início e término),Turma,Nº de alunos,Finalidade`
     return [headerRow, parsedRows.join('\n')].join('\n')

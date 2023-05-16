@@ -8,7 +8,7 @@ import {PreviewComponent} from './pages/preview/preview.component'
 import {TeamFormComponent, ScheduleComponent} from './components/forms'
 import {DashboardComponent} from './pages/dashboard/dashboard.component'
 import {TeamTableComponent} from './components/tables'
-import {GoalPipe, WeekdayPipe} from './shared/pipes'
+import {WeekdayPipe} from './shared/pipes'
 import {appProvideres} from './app.providers'
 import {AppComponent} from './app.component'
 import {appRoutes} from './app.routes'
@@ -24,7 +24,6 @@ import {AppShell} from './app.shell'
     TeamFormComponent,
     TeamTableComponent,
     WeekdayPipe,
-    GoalPipe
   ],
   imports: [
     BrowserModule,
@@ -33,7 +32,7 @@ import {AppShell} from './app.shell'
     }),
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    MATERIAL_MODULES
+    MATERIAL_MODULES,
   ],
   providers: [appProvideres()],
   bootstrap: [AppComponent],
