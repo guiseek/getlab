@@ -1,61 +1,73 @@
-<form class="row" [formGroup]="previewForm">
+<mat-card>
+  <form class="row" [formGroup]="previewForm">
+    <mat-form-field class="col">
+      <mat-label>Período</mat-label>
+      <mat-date-range-input [formGroup]="previewForm" [rangePicker]="picker">
+        <input
+          matStartDate
+          formControlName="dtstart"
+          placeholder="Data inicial"
+        />
+        <input matEndDate formControlName="until" placeholder="Data final" />
+      </mat-date-range-input>
+      <mat-datepicker-toggle matIconSuffix [for]="picker" />
+      <mat-date-range-picker #picker (closed)="scheduleRef.open()" />
 
-  <mat-form-field class="col">
-    <mat-label>Período</mat-label>
-    <mat-date-range-input [formGroup]="previewForm" [rangePicker]="picker">
-      <input
-        matStartDate
-        formControlName="dtstart"
-        placeholder="Data inicial"
-      />
-      <input matEndDate formControlName="until" placeholder="Data final" />
-    </mat-date-range-input>
-    <mat-datepicker-toggle matIconSuffix [for]="picker" />
-    <mat-date-range-picker #picker />
-
-    <mat-error>Obrigatório</mat-error>
-    <mat-error
-      *ngIf="previewForm.controls.dtstart.hasError('matStartDateInvalid')"
-    >
-      Data inicial inválida
-    </mat-error>
-    <mat-error
-      *ngIf="previewForm.controls.until.hasError('matEndDateInvalid')"
-    >
-      Data final inválida
-    </mat-error>
-  </mat-form-field>
-
-  <mat-form-field class="col">
-    <mat-label>Reservas</mat-label>
-    <mat-select formControlName="schedules" multiple>
-      <mat-select-trigger>
-        {{schedules?.[0]?.byweekday! | weekday }}
-        <span
-          *ngIf="(schedules?.length || 0) > 1"
-          class="example-additional-selection"
-        >
-          (+{{ (schedules?.length || 0) - 1 }}
-          {{ schedules?.length === 2 ? 'outro dia' : 'outros dias' }})
-        </span>
-      </mat-select-trigger>
-      <mat-option
-        *ngFor="let schedule of scheduleStore.data$ | async"
-        [value]="schedule"
+      <mat-error>Obrigatório</mat-error>
+      <mat-error
+        *ngIf="previewForm.controls.dtstart.hasError('matStartDateInvalid')"
       >
-        <span [ngPlural]="schedule.interval">
-          <ng-template ngPluralCase="=1">Toda</ng-template>
-          <ng-template ngPluralCase="few">
-            A cada {{ schedule.interval }}
-          </ng-template>
-        </span>
-        <strong>{{ schedule.byweekday | weekday }}(s)</strong>
-        <strong>{{ schedule.time.start }}</strong> até
-        <strong>{{ schedule.time.end }}</strong>
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-</form>
+        Data inicial inválida
+      </mat-error>
+      <mat-error
+        *ngIf="previewForm.controls.until.hasError('matEndDateInvalid')"
+      >
+        Data final inválida
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="col">
+      <mat-label>Reservas</mat-label>
+      <mat-select #scheduleRef formControlName="schedules" multiple>
+        <mat-select-trigger>
+          {{schedules?.[0]?.byweekday! | weekday }}
+          <span
+            *ngIf="(schedules?.length || 0) > 1"
+            class="example-additional-selection"
+          >
+            (+{{ (schedules?.length || 0) - 1 }}
+            {{ schedules?.length === 2 ? 'outro dia' : 'outros dias' }})
+          </span>
+        </mat-select-trigger>
+        <mat-option
+          *ngFor="let schedule of scheduleStore.data$ | async"
+          [value]="schedule"
+        >
+          <span [ngPlural]="schedule.interval">
+            <ng-template ngPluralCase="=1">
+              <span>Toda</span>
+              <strong>{{ schedule.byweekday | weekday }}</strong>
+            </ng-template>
+            <ng-template ngPluralCase="=2">
+              <span>Uma</span>
+              <strong>{{ schedule.byweekday | weekday }}</strong>
+              <span>sim e outra não</span>
+            </ng-template>
+            <ng-template ngPluralCase="few">
+              <span>A cada {{ schedule.interval }}</span>
+              <strong>{{ schedule.byweekday | weekday }}s</strong>
+            </ng-template>
+
+            <span>das</span>
+            <strong>{{ schedule.time.start }}h</strong>
+            <span>até</span>
+            <strong>{{ schedule.time.end }}h</strong>
+          </span>
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-card>
 
 <mat-card>
   <table mat-table [dataSource]="dataSource$">
@@ -104,3 +116,13 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
 </mat-card>
+
+<button
+  color="primary"
+  mat-raised-button
+  [disabled]="!spreadsheet.rows.length"
+  (click)="spreadsheet.download()"
+>
+  <mat-icon>description</mat-icon>
+  Download em CSV
+</button>

@@ -61,8 +61,9 @@ import {ScheduleStore, TeamStore} from './shared/store'
       }
 
       .brand {
-        font-family: 'Schoolbell', cursive;
+        font-family: 'Varela Round', sans-serif;
         font-size: 2rem;
+        font-weight: 600;
       }
 
       :host main {

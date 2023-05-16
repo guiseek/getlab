@@ -8,13 +8,13 @@ import {BehaviorSubject} from 'rxjs'
 
 const TIME = {
   START: [
-    '08:00',
+    '8',
     '08:50',
-    '10:00',
+    '10',
     '10:50',
-    '19:00',
+    '19',
     '19:50',
-    '21:00',
+    '21',
     '21:50',
   ] as TimeStart[],
   END: [
@@ -51,7 +51,7 @@ export class ScheduleComponent implements OnInit {
     // dtstart: new FormControl(null, Validators.required),
     // until: new FormControl(null, Validators.required),
     time: new FormGroup<TypedForm<Time>>({
-      start: new FormControl('19:00', [Validators.required]),
+      start: new FormControl('19', [Validators.required]),
       end: new FormControl('20:40', [Validators.required]),
     }),
     interval: new FormControl(1, [
@@ -89,19 +89,19 @@ export class ScheduleComponent implements OnInit {
 
   getTimeEnds(start: TimeStart): TimeEnd[] {
     switch (start) {
-      case '08:00':
+      case '8':
         return ['08:50', '09:40']
       case '08:50':
         return ['09:40']
-      case '10:00':
+      case '10':
         return ['10:50', '11:30']
       case '10:50':
         return ['11:30']
-      case '19:00':
+      case '19':
         return ['19:50', '20:40']
       case '19:50':
         return ['20:40']
-      case '21:00':
+      case '21':
         return ['21:50', '22:30']
       case '21:50':
         return ['22:30']

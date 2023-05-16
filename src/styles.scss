@@ -4,8 +4,7 @@
 @include mat.core();
 
 $getlab-primary: mat.define-palette(app.$navy);
-$getlab-accent: mat.define-palette(app.$navy);
-$getlab-accent-dark: mat.define-palette(app.$yellow);
+$getlab-accent: mat.define-palette(mat.$amber-palette);
 
 // The warn palette is optional (defaults to red).
 $getlab-warn: mat.define-palette(mat.$red-palette);
@@ -35,19 +34,22 @@ body {
 }
 body {
   margin: 0;
-  font-family: 'Schoolbell', cursive;
+  font-family: 'Varela Round', sans-serif;
   // font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
 body {
   * {
-    font-family: 'Schoolbell', cursive;
+    font-family: 'Varela Round', sans-serif;
   }
   .mat-toolbar,
   .mdc-list-item__primary-text,
+  .mat-mdc-button:not(.mdc-fab) .mdc-button__label,
   .mat-mdc-card-title {
-    font-family: 'Schoolbell', cursive;
-    font-size: 160%;
+    font-family: 'Varela Round', sans-serif;
+    font-weight: 400;
+    font-size: 120%;
+    line-height: 100%;
   }
 }
 

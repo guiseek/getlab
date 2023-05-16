@@ -1,13 +1,13 @@
 import {Team} from './team'
 
 export type TimeStart =
-  | '08:00'
+  | '8'
   | '08:50'
-  | '10:00'
+  | '10'
   | '10:50'
-  | '19:00'
+  | '19'
   | '19:50'
-  | '21:00'
+  | '21'
   | '21:50'
 export type TimeEnd =
   | '08:50'

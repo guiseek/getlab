@@ -1,5 +1,11 @@
-import {OnInit, Component} from '@angular/core'
+import {
+  Component,
+  ViewChild,
+  AfterViewInit,
+  ChangeDetectionStrategy,
+} from '@angular/core'
 import {FormControl, FormGroup, Validators} from '@angular/forms'
+import {MatDateRangePicker} from '@angular/material/datepicker'
 import {Preview, Schedule} from '../../shared/interfaces'
 import {ScheduleStore} from '../../shared/store'
 import {Spreadsheet} from '../../domain/entities'
@@ -9,10 +15,16 @@ import {BehaviorSubject} from 'rxjs'
   selector: 'app-preview',
   templateUrl: './preview.component.html',
   styleUrls: ['./preview.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PreviewComponent implements OnInit {
+export class PreviewComponent implements AfterViewInit {
+  @ViewChild('picker', {static: true})
+  picker!: MatDateRangePicker<Date>
+
   #dataSource = new BehaviorSubject<Preview[]>([])
   dataSource$ = this.#dataSource.asObservable()
+
+  readonly spreadsheet = new Spreadsheet()
 
   displayedColumns = [
     'date',
@@ -37,12 +49,20 @@ export class PreviewComponent implements OnInit {
     this.scheduleStore.load()
   }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
+    queueMicrotask(() => {
+      if (this.picker) {
+        this.picker.open()
+      }
+    })
+
     this.previewForm.valueChanges.subscribe(({schedules, dtstart, until}) => {
       if (schedules && dtstart && until) {
-        const spreadsheet = new Spreadsheet(schedules, {dtstart, until})
-        this.#dataSource.next(spreadsheet.rows)
-        console.log(spreadsheet)
+        this.spreadsheet.build(schedules, {dtstart, until})
+        this.#dataSource.next(this.spreadsheet.rows)
+
+        // const spreadsheet = new Spreadsheet(schedules, {dtstart, until})
+        // console.log(spreadsheet)
       }
     })
   }

@@ -1,14 +1,36 @@
-import {DateRange, Preview, Schedule, Time} from '../../shared/interfaces'
+import {DateRange, PreviewRow, Schedule, Time} from '../../shared/interfaces'
+import {
+  createFile,
+  downloadFile,
+  getDatePrefixFile,
+} from '../../shared/utilities'
 import {RRule} from 'rrule'
 
 export class Spreadsheet {
-  rows: Preview[]
+  rows: PreviewRow[] = []
 
-  constructor(schedules: Schedule[], dateRange: DateRange) {
+  build(schedules: Schedule[], dateRange: DateRange) {
     this.rows = this.#merge(schedules, dateRange)
+    return this
   }
 
-  #parse() {}
+  download() {
+    const spreadsheet = this.#parse(this.rows)
+    const blob = createFile(spreadsheet, 'text/csv')
+
+    const prefix = getDatePrefixFile(this.rows[0].date)
+    const name = `Solicitação de reserva laboratórios`
+
+    downloadFile(blob, `${prefix} - ${name}.csv`)
+  }
+
+  #parse(rows: PreviewRow[]) {
+    const parsedRows = rows.map(({date, time, team, people, goal}) => {
+      return `${date.toDateString()},${time},${team},${people},${goal}`
+    })
+    const headerRow = `Data,Horário (Início e término),Turma,Nº de alunos,Finalidade`
+    return [headerRow, parsedRows.join('\n')].join('\n')
+  }
 
   #getTime(time: Time) {
     return `${time.start}h as ${time.end}h`
