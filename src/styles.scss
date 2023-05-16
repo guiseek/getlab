@@ -1,20 +1,8 @@
-// Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
 @use './scss/palette' as app;
 
-// @import url('https://fonts.googleapis.com/css2?family=Braah+One&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Schoolbell&display=swap');
-// Plus imports for other components in your app.
-
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
 @include mat.core();
 
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
 $getlab-primary: mat.define-palette(app.$navy);
 $getlab-accent: mat.define-palette(app.$navy);
 $getlab-accent-dark: mat.define-palette(app.$yellow);
@@ -35,25 +23,10 @@ $getlab-theme: mat.define-light-theme(
   )
 );
 
-$getlab-dark-theme: mat.define-dark-theme(
-  (
-    color: (
-      primary: $getlab-primary,
-      accent: $getlab-accent,
-      warn: $getlab-warn,
-    ),
-    typography: mat.define-typography-config(),
-  )
-);
-
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using
-mat.$theme-ignore-duplication-warnings: true;
 @include mat.all-component-themes($getlab-theme);
-body.dark-theme {
-  @include mat.all-component-colors($getlab-dark-theme);
-}
 /* You can add global styles to this file, and also import other style files */
 
 html,

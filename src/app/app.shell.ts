@@ -6,7 +6,7 @@ import {ScheduleService, TeamService} from './shared/services'
 import {Schedule, Team} from './shared/interfaces'
 import {Component} from '@angular/core'
 import {Observable} from 'rxjs'
-import { TeamStore } from './shared/store'
+import {TeamStore} from './shared/store'
 
 @Component({
   selector: 'app-shell',
@@ -49,7 +49,7 @@ import { TeamStore } from './shared/store'
           <span class="brand">GetLab</span>
         </mat-toolbar>
         <main>
-        <ng-content select="router-outlet"></ng-content>
+          <ng-content select="router-outlet"></ng-content>
         </main>
       </mat-sidenav-content>
     </mat-sidenav-container>

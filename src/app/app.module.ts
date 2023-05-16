@@ -3,19 +3,16 @@ import {RouterModule} from '@angular/router'
 import {ReactiveFormsModule} from '@angular/forms'
 import {BrowserModule} from '@angular/platform-browser'
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations'
-import {MaterialModule} from './shared/material.module'
+import {MATERIAL_MODULES} from './shared/material.module'
 import {PreviewComponent} from './pages/preview/preview.component'
 import {TeamFormComponent, ScheduleComponent} from './components/forms'
 import {DashboardComponent} from './pages/dashboard/dashboard.component'
-import {TeamTableComponent, ScheduleTableComponent} from './components/tables'
+import {TeamTableComponent} from './components/tables'
 import {appProvideres} from './app.providers'
 import {AppComponent} from './app.component'
 import {WeekdayPipe} from './shared/pipes'
 import {appRoutes} from './app.routes'
 import {AppShell} from './app.shell'
-import {MatTableModule} from '@angular/material/table'
-import {MatPaginatorModule} from '@angular/material/paginator'
-import {MatSortModule} from '@angular/material/sort'
 
 @NgModule({
   declarations: [
@@ -26,7 +23,6 @@ import {MatSortModule} from '@angular/material/sort'
     PreviewComponent,
     TeamFormComponent,
     TeamTableComponent,
-    ScheduleTableComponent,
     WeekdayPipe,
   ],
   imports: [
@@ -36,10 +32,7 @@ import {MatSortModule} from '@angular/material/sort'
     }),
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    MaterialModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
+    MATERIAL_MODULES
   ],
   providers: [appProvideres()],
   bootstrap: [AppComponent],

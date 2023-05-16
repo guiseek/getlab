@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core'
+import {Component} from '@angular/core'
 
 @Component({
   selector: 'app-root',
@@ -9,12 +9,6 @@ import {Component, OnInit} from '@angular/core'
   `,
   styles: [],
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   title = 'getlab'
-
-  ngOnInit() {
-    if (new Date().getHours() >= 18) {
-      document.body.classList.add('dark-theme')
-    }
-  }
 }
