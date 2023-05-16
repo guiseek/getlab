@@ -1,4 +1,31 @@
 <form class="row" [formGroup]="previewForm">
+
+  <mat-form-field class="col">
+    <mat-label>Período</mat-label>
+    <mat-date-range-input [formGroup]="previewForm" [rangePicker]="picker">
+      <input
+        matStartDate
+        formControlName="dtstart"
+        placeholder="Data inicial"
+      />
+      <input matEndDate formControlName="until" placeholder="Data final" />
+    </mat-date-range-input>
+    <mat-datepicker-toggle matIconSuffix [for]="picker" />
+    <mat-date-range-picker #picker />
+
+    <mat-error>Obrigatório</mat-error>
+    <mat-error
+      *ngIf="previewForm.controls.dtstart.hasError('matStartDateInvalid')"
+    >
+      Data inicial inválida
+    </mat-error>
+    <mat-error
+      *ngIf="previewForm.controls.until.hasError('matEndDateInvalid')"
+    >
+      Data final inválida
+    </mat-error>
+  </mat-form-field>
+
   <mat-form-field class="col">
     <mat-label>Reservas</mat-label>
     <mat-select formControlName="schedules" multiple>
@@ -27,32 +54,6 @@
         <strong>{{ schedule.time.end }}</strong>
       </mat-option>
     </mat-select>
-  </mat-form-field>
-
-  <mat-form-field class="col">
-    <mat-label>Período</mat-label>
-    <mat-date-range-input [formGroup]="previewForm" [rangePicker]="picker">
-      <input
-        matStartDate
-        formControlName="dtstart"
-        placeholder="Data inicial"
-      />
-      <input matEndDate formControlName="until" placeholder="Data final" />
-    </mat-date-range-input>
-    <mat-datepicker-toggle matIconSuffix [for]="picker" />
-    <mat-date-range-picker #picker />
-
-    <mat-error>Obrigatório</mat-error>
-    <mat-error
-      *ngIf="previewForm.controls.dtstart.hasError('matStartDateInvalid')"
-    >
-      Data inicial inválida
-    </mat-error>
-    <mat-error
-      *ngIf="previewForm.controls.until.hasError('matEndDateInvalid')"
-    >
-      Data final inválida
-    </mat-error>
   </mat-form-field>
 </form>
 

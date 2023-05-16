@@ -28,6 +28,7 @@ export class Spreadsheet {
           ...team,
         }
       })
+      .sort((a, b) => (a.date < b.date ? -1 : 1))
   }
 
   #getRRuleOptions(
