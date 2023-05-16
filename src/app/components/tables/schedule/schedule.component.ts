@@ -1,5 +1,4 @@
 import {Component} from '@angular/core'
-import {TeamStore} from '../../../shared/store'
 
 @Component({
   selector: 'app-team',

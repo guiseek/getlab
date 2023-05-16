@@ -1,11 +1,7 @@
 import {StorageService} from './storage.service'
 import {Team} from '../interfaces/team'
-import {BehaviorSubject} from 'rxjs'
 
 export class TeamService extends StorageService<Team> {
-  // #data = new BehaviorSubject<Team[]>([])
-  // data$ = this.#data.asObservable()
-
   constructor(storage: Storage) {
     super(storage, 'team')
   }
@@ -26,6 +22,5 @@ export class TeamService extends StorageService<Team> {
         return {...team, id: crypto.randomUUID()}
       })
     )
-    // this.#data.next(this.read())
   }
 }

@@ -99,6 +99,12 @@ body {
   opacity: 0.5;
 }
 
+span,
+strong {
+  display: inline-flex;
+  padding: 2px;
+}
+
 .full-width,
 .mat-mdc-form-field {
   width: 100%;

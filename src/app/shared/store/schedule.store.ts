@@ -1,23 +1,23 @@
-import {Team} from '../interfaces'
-import {TeamService} from '../services'
+import {Schedule} from '../interfaces'
+import {ScheduleService} from '../services'
 import {Store} from './store'
 
-interface TeamState {
-  data: Team[]
-  team?: Team
+interface ScheduleState {
+  data: Schedule[]
+  team?: Schedule
 }
 
-export class TeamStore extends Store<TeamState> {
+export class ScheduleStore extends Store<ScheduleState> {
   data$ = this.select((state) => state.data)
   team$ = this.select((state) => state.team)
 
-  constructor(private service: TeamService) {
+  constructor(private service: ScheduleService) {
     super({
       data: [],
     })
   }
 
-  loadTeam(id: string) {
+  loadSchedule(id: string) {
     this.service.findById(id).then((team) => {
       this.setState({team})
     })
@@ -29,7 +29,7 @@ export class TeamStore extends Store<TeamState> {
     })
   }
 
-  add(...team: Team[]) {
+  add(...team: Schedule[]) {
     this.service.add(...team)
     this.load()
   }

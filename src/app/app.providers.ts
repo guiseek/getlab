@@ -4,7 +4,7 @@ import ptBR from '@angular/common/locales/extra/br'
 import {registerLocaleData} from '@angular/common'
 import pt from '@angular/common/locales/pt'
 import {LOCALE_ID} from '@angular/core'
-import {TeamStore} from './shared/store'
+import {ScheduleStore, TeamStore} from './shared/store'
 
 export const appProvideres = () => {
   registerLocaleData(pt, 'pt-BR', ptBR)
@@ -36,6 +36,11 @@ export const appProvideres = () => {
       provide: ScheduleService,
       useClass: ScheduleService,
       deps: [Storage],
+    },
+    {
+      provide: ScheduleStore,
+      useClass: ScheduleStore,
+      deps: [ScheduleService],
     },
   ]
 }

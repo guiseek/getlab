@@ -2,18 +2,9 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 16px;
 
-  .mat-mdc-card {
-    overflow: hidden;
-  }
-  .full-width-table {
-    width: 100%;
+  .mat-mdc-form-field {
+    margin-bottom: -22px;
   }
 }
 
-span,
-strong {
-  display: inline-flex;
-  padding: 2px;
-}

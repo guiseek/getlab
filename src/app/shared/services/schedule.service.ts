@@ -10,20 +10,21 @@ export class ScheduleService extends StorageService<Schedule> {
     super(storage, 'schedule')
   }
 
-  load() {
-    this.#data.next(this.read())
+  findAll() {
+    return Promise.resolve(this.read())
   }
 
   findById(id: string) {
-    return this.read().find((schedule) => schedule.id === id)
+    const team = this.read().find((team) => team.id === id)
+    if (!team) Promise.reject(`Time ${id} não encontrado`)
+    return Promise.resolve(team)
   }
 
-  add(...schedule: Schedule[]) {
+  add(...team: Schedule[]) {
     this.write(
-      ...schedule.map((schedule) => {
-        return {...schedule, id: crypto.randomUUID()}
+      ...team.map((team) => {
+        return {...team, id: crypto.randomUUID()}
       })
     )
-    this.#data.next(this.read())
   }
 }
