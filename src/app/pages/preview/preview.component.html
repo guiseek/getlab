@@ -1,17 +1,15 @@
-<header>
-  <mat-form-field>
+<form class="row" [formGroup]="previewForm">
+  <mat-form-field class="col">
     <mat-label>Reservas</mat-label>
-    <mat-select [formControl]="schedulesControl" multiple>
+    <mat-select formControlName="schedules" multiple>
       <mat-select-trigger>
-        {{schedulesControl.value?.[0]?.byweekday! | weekday }}
+        {{schedules?.[0]?.byweekday! | weekday }}
         <span
-          *ngIf="(schedulesControl.value?.length || 0) > 1"
+          *ngIf="(schedules?.length || 0) > 1"
           class="example-additional-selection"
         >
-          (+{{ (schedulesControl.value?.length || 0) - 1 }}
-          {{
-            schedulesControl.value?.length === 2 ? 'outro dia' : 'outros dias'
-          }})
+          (+{{ (schedules?.length || 0) - 1 }}
+          {{ schedules?.length === 2 ? 'outro dia' : 'outros dias' }})
         </span>
       </mat-select-trigger>
       <mat-option
@@ -30,7 +28,33 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
-</header>
+
+  <mat-form-field class="col">
+    <mat-label>Período</mat-label>
+    <mat-date-range-input [formGroup]="previewForm" [rangePicker]="picker">
+      <input
+        matStartDate
+        formControlName="dtstart"
+        placeholder="Data inicial"
+      />
+      <input matEndDate formControlName="until" placeholder="Data final" />
+    </mat-date-range-input>
+    <mat-datepicker-toggle matIconSuffix [for]="picker" />
+    <mat-date-range-picker #picker />
+
+    <mat-error>Obrigatório</mat-error>
+    <mat-error
+      *ngIf="previewForm.controls.dtstart.hasError('matStartDateInvalid')"
+    >
+      Data inicial inválida
+    </mat-error>
+    <mat-error
+      *ngIf="previewForm.controls.until.hasError('matEndDateInvalid')"
+    >
+      Data final inválida
+    </mat-error>
+  </mat-form-field>
+</form>
 
 <mat-card>
   <table mat-table [dataSource]="dataSource$">
@@ -58,12 +82,12 @@
 
     <ng-container matColumnDef="people">
       <th mat-header-cell *matHeaderCellDef>N° de alunos</th>
-      <td mat-cell *matCellDef="let element">{{ element.amountOfPeople }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.people }}</td>
     </ng-container>
 
     <ng-container matColumnDef="goal">
       <th mat-header-cell *matHeaderCellDef>Finalidade</th>
-      <td mat-cell *matCellDef="let element">{{ element.goal }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.goal | goal }}</td>
     </ng-container>
 
     <!-- <ng-container matColumnDef="remove">

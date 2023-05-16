@@ -1,5 +1,7 @@
 import {Routes} from '@angular/router'
 import {DashboardComponent} from './pages/dashboard'
+import {PreviewComponent} from './pages/preview'
+import {TeamTableComponent} from './components/tables'
 
 export const appRoutes: Routes = [
   {
@@ -8,17 +10,11 @@ export const appRoutes: Routes = [
   },
   {
     path: 'preview',
-    loadComponent: () =>
-      import('./pages/preview/preview.component').then(
-        (c) => c.PreviewComponent
-      ),
+    component: PreviewComponent,
   },
   {
     path: 'teams',
-    loadComponent: () =>
-      import('./components/tables/team/team.component').then(
-        (c) => c.TeamTableComponent
-      ),
+    component: TeamTableComponent,
   },
   {
     path: '**',

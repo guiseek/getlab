@@ -25,11 +25,16 @@ export interface Time {
 }
 
 export interface Schedule {
-  id: string;
+  id: string
   team: Team
   byweekday: number
-  dtstart: Date
-  until: Date
+  // dtstart: Date
+  // until: Date
   time: Time
   interval: 1 | 2
+}
+
+export interface DateRange {
+  dtstart: Date
+  until: Date
 }

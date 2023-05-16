@@ -1,12 +1,18 @@
 import {Breakpoints, BreakpointObserver} from '@angular/cdk/layout'
-import {ScheduleService, TeamService} from '../../shared/services'
+import {TeamStore, ScheduleStore} from 'src/app/shared/store'
 import {Component} from '@angular/core'
 import {map} from 'rxjs/operators'
 import {Observable} from 'rxjs'
-import { TeamStore } from 'src/app/shared/store/team.store'
 
 interface Service<T = unknown> {
   data$: Observable<T[]>
+}
+
+interface Card {
+  title: string
+  cols: number
+  rows: number
+  store: Service | null
 }
 
 @Component({
@@ -15,36 +21,28 @@ interface Service<T = unknown> {
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent {
-  /** Based on the screen size, switch from standard to one column per row */
-  cards: Observable<
-    {
-      title: string
-      cols: number
-      rows: number
-      store: Service | null
-    }[]
-  > = this.bpObserver.observe(Breakpoints.Handset).pipe(
+  cards: Observable<Card[]> = this.bpObserver.observe(Breakpoints.Handset).pipe(
     map(({matches}) => {
       if (matches) {
         return [
           {title: 'Turmas', cols: 2, rows: 1, store: this.teamStore},
-          {title: 'Reservas', cols: 2, rows: 1, store: this.scheduleService},
+          {title: 'Reservas', cols: 2, rows: 1, store: this.scheduleStore},
         ]
       }
 
       return [
         {title: 'Turmas', cols: 1, rows: 1, store: this.teamStore},
-        {title: 'Reservas', cols: 1, rows: 1, store: this.scheduleService},
+        {title: 'Reservas', cols: 1, rows: 1, store: this.scheduleStore},
       ]
     })
   )
 
   constructor(
     private bpObserver: BreakpointObserver,
-    private teamStore: TeamStore,
-    private scheduleService: ScheduleService
+    private scheduleStore: ScheduleStore,
+    private teamStore: TeamStore
   ) {
-    console.log(teamStore)
     teamStore.data$.subscribe(console.log)
+    scheduleStore.data$.subscribe(console.log)
   }
 }

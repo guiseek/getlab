@@ -1,12 +1,12 @@
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout'
 import {ScheduleComponent, TeamFormComponent} from './components/forms'
 import {MatDialog} from '@angular/material/dialog'
-import {map, shareReplay} from 'rxjs/operators'
+import {map, shareReplay, take} from 'rxjs/operators'
 import {ScheduleService, TeamService} from './shared/services'
 import {Schedule, Team} from './shared/interfaces'
 import {Component} from '@angular/core'
 import {Observable} from 'rxjs'
-import {TeamStore} from './shared/store'
+import {ScheduleStore, TeamStore} from './shared/store'
 
 @Component({
   selector: 'app-shell',
@@ -46,7 +46,7 @@ import {TeamStore} from './shared/store'
           >
             <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
           </button>
-          <span class="brand">GetLab</span>
+          <h1 class="brand">{{ title }}</h1>
         </mat-toolbar>
         <main>
           <ng-content select="router-outlet"></ng-content>
@@ -85,7 +85,7 @@ import {TeamStore} from './shared/store'
   ],
 })
 export class AppShell {
-  title = 'getlab'
+  title = 'GetLab'
 
   isHandset$: Observable<boolean> = this.bpObserver
     .observe(Breakpoints.Handset)
@@ -96,13 +96,13 @@ export class AppShell {
 
   constructor(
     private bpObserver: BreakpointObserver,
-    private scheduleService: ScheduleService,
+    private scheduleStore: ScheduleStore,
     private teamStore: TeamStore,
     private matDialog: MatDialog
   ) {
-    console.log(teamStore)
     teamStore.data$.subscribe(console.log)
     this.teamStore.load()
+    this.scheduleStore.load()
   }
 
   openTeamForm() {
@@ -111,21 +111,23 @@ export class AppShell {
         disableClose: true,
       })
       .afterClosed()
+      .pipe(take(1))
+
     team$.subscribe((team: Team) => {
-      if (team) {
-        this.teamStore.add(team)
-      }
+      if (team) this.teamStore.add(team)
     })
   }
 
   openScheduleForm() {
-    const schedule$ = this.matDialog.open(ScheduleComponent).afterClosed()
-    schedule$.subscribe((schedule: Schedule) => {
-      console.log(schedule)
+    const schedule$ = this.matDialog
+      .open(ScheduleComponent, {
+        disableClose: true,
+      })
+      .afterClosed()
+      .pipe(take(1))
 
-      if (schedule) {
-        this.scheduleService.add(schedule)
-      }
+    schedule$.subscribe((schedule: Schedule) => {
+      if (schedule) this.scheduleStore.add(schedule)
     })
   }
 }

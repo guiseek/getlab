@@ -33,25 +33,3 @@ export const MATERIAL_MODULES = [
   MatRadioModule,
   MatTableModule,
 ]
-
-// @NgModule({
-//   exports: [
-//     LayoutModule,
-//     MatToolbarModule,
-//     MatDialogModule,
-//     MatButtonModule,
-//     MatSidenavModule,
-//     MatIconModule,
-//     MatListModule,
-//     MatGridListModule,
-//     MatCardModule,
-//     MatDatepickerModule,
-//     MatNativeDateModule,
-//     MatMenuModule,
-//     MatInputModule,
-//     MatSelectModule,
-//     MatRadioModule,
-//     MatTableModule,
-//   ],
-// })
-// export class MaterialModule {}

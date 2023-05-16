@@ -48,8 +48,8 @@ export class ScheduleComponent implements OnInit {
       Validators.min(0),
       Validators.max(6),
     ]),
-    dtstart: new FormControl(null, Validators.required),
-    until: new FormControl(null, Validators.required),
+    // dtstart: new FormControl(null, Validators.required),
+    // until: new FormControl(null, Validators.required),
     time: new FormGroup<TypedForm<Time>>({
       start: new FormControl('19:00', [Validators.required]),
       end: new FormControl('20:40', [Validators.required]),
@@ -62,6 +62,7 @@ export class ScheduleComponent implements OnInit {
   })
 
   daysOfWeek = [0, 1, 2, 3, 4, 5, 6]
+  everyWeeks = [1, 2]
 
   constructor(
     private ref: MatDialogRef<ScheduleComponent>,

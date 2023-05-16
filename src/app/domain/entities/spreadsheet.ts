@@ -1,11 +1,11 @@
+import {DateRange, Preview, Schedule, Time} from '../../shared/interfaces'
 import {RRule} from 'rrule'
-import {Preview, Schedule, Time} from '../../shared/interfaces'
 
 export class Spreadsheet {
   rows: Preview[]
 
-  constructor(schedules: Schedule[]) {
-    this.rows = this.#merge(schedules)
+  constructor(schedules: Schedule[], dateRange: DateRange) {
+    this.rows = this.#merge(schedules, dateRange)
   }
 
   #parse() {}
@@ -14,10 +14,10 @@ export class Spreadsheet {
     return `${time.start}h as ${time.end}h`
   }
 
-  #merge(schedules: Schedule[]) {
+  #merge(schedules: Schedule[], dateRange: DateRange) {
     return schedules
       .map((schedule) => {
-        const dates = this.#getDates(this.#getRRuleOptions(schedule))
+        const dates = this.#getDates(this.#getRRuleOptions(schedule, dateRange))
         return dates.map((date) => ({...schedule, date}))
       })
       .reduce((prev = [], curr = []) => [...prev, ...curr], [])
@@ -30,7 +30,10 @@ export class Spreadsheet {
       })
   }
 
-  #getRRuleOptions({byweekday, interval, dtstart, until}: Schedule) {
+  #getRRuleOptions(
+    {byweekday, interval}: Schedule,
+    {dtstart, until}: DateRange
+  ) {
     return {
       interval,
       byweekday,
