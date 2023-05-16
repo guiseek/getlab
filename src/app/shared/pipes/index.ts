@@ -1,1 +1,1 @@
-export * from './weekday.pipe';
+export * from './weekday.pipe'

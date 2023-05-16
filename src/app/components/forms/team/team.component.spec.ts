@@ -1,21 +1,21 @@
-import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatInputModule } from '@angular/material/input';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatSelectModule } from '@angular/material/select';
+import {waitForAsync, ComponentFixture, TestBed} from '@angular/core/testing'
+import {ReactiveFormsModule} from '@angular/forms'
+import {NoopAnimationsModule} from '@angular/platform-browser/animations'
+import {MatButtonModule} from '@angular/material/button'
+import {MatCardModule} from '@angular/material/card'
+import {MatInputModule} from '@angular/material/input'
+import {MatRadioModule} from '@angular/material/radio'
+import {MatSelectModule} from '@angular/material/select'
 
-import { TeamFormComponent } from './team.component';
+import {TeamFormComponent} from './team.component'
 
 describe('TeamComponent', () => {
-  let component: TeamFormComponent;
-  let fixture: ComponentFixture<TeamFormComponent>;
+  let component: TeamFormComponent
+  let fixture: ComponentFixture<TeamFormComponent>
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ TeamFormComponent ],
+      declarations: [TeamFormComponent],
       imports: [
         NoopAnimationsModule,
         ReactiveFormsModule,
@@ -24,17 +24,17 @@ describe('TeamComponent', () => {
         MatInputModule,
         MatRadioModule,
         MatSelectModule,
-      ]
-    }).compileComponents();
-  }));
+      ],
+    }).compileComponents()
+  }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TeamFormComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    fixture = TestBed.createComponent(TeamFormComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
   it('should compile', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

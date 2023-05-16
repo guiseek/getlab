@@ -1,5 +1,6 @@
 import {DateRange, PreviewRow, Schedule, Time} from '../../shared/interfaces'
 import {
+  formatRow,
   createFile,
   downloadFile,
   getDatePrefixFile,
@@ -15,7 +16,7 @@ export class Spreadsheet {
   }
 
   download() {
-    const spreadsheet = this.#parse(this.rows)
+    const spreadsheet = this.parse(this.rows)
     const blob = createFile(spreadsheet, 'text/csv')
 
     const prefix = getDatePrefixFile(this.rows[0].date)
@@ -24,16 +25,12 @@ export class Spreadsheet {
     downloadFile(blob, `${prefix} - ${name}.csv`)
   }
 
-  #parse(rows: PreviewRow[]) {
-    const parsedRows = rows.map(({date, time, team, people, goal}) => {
-      return `${date.toLocaleDateString()},${time},${team},${people},${goal}`
-    })
-    const headerRow = `Data,Horário (Início e término),Turma,Nº de alunos,Finalidade`
-    return [headerRow, parsedRows.join('\n')].join('\n')
+  parse(rows: PreviewRow[]) {
+    return rows.map(formatRow).join('\n')
   }
 
   #getTime(time: Time) {
-    return `${time.start}h as ${time.end}h`
+    return `${time.start} as ${time.end}`
   }
 
   #merge(schedules: Schedule[], dateRange: DateRange) {

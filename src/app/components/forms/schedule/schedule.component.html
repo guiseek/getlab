@@ -46,7 +46,7 @@
           <mat-label>Horário inicial</mat-label>
           <mat-select formControlName="start" required>
             <mat-option *ngFor="let time of timeStart$ | async" [value]="time">
-              {{ time }}h
+              {{ time }}
             </mat-option>
           </mat-select>
           <mat-icon matPrefix class="mat-muted">schedule</mat-icon>
@@ -57,7 +57,7 @@
           <mat-label>Horário final</mat-label>
           <mat-select formControlName="end" required>
             <mat-option *ngFor="let time of timeEnd$ | async" [value]="time">
-              {{ time }}h
+              {{ time }}
             </mat-option>
           </mat-select>
           <mat-icon matPrefix class="mat-muted">schedule</mat-icon>

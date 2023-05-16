@@ -59,9 +59,9 @@
             </ng-template>
 
             <span>das</span>
-            <strong>{{ schedule.time.start }}h</strong>
+            <strong>{{ schedule.time.start }}</strong>
             <span>até</span>
-            <strong>{{ schedule.time.end }}h</strong>
+            <strong>{{ schedule.time.end }}</strong>
           </span>
         </mat-option>
       </mat-select>
@@ -117,12 +117,24 @@
   </table>
 </mat-card>
 
-<button
-  color="primary"
-  mat-raised-button
-  [disabled]="!spreadsheet.rows.length"
-  (click)="spreadsheet.download()"
->
-  <mat-icon>description</mat-icon>
-  Download em CSV
-</button>
+<textarea hidden [formControl]="parsedControl"></textarea>
+
+<div class="flex right gap-16 fixed bottom">
+  <button
+    mat-raised-button
+    [disabled]="!spreadsheet.rows.length"
+    [cdkCopyToClipboard]="parsedControl.value ?? ''"
+  >
+    <mat-icon>content_copy</mat-icon>
+    Copiar para área de transferência
+  </button>
+  <button
+    color="primary"
+    mat-raised-button
+    [disabled]="!spreadsheet.rows.length"
+    (click)="spreadsheet.download()"
+  >
+    <mat-icon>description</mat-icon>
+    Download em CSV
+  </button>
+</div>

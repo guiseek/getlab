@@ -2,30 +2,30 @@ import {Component, OnInit} from '@angular/core'
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms'
 import {TimeEnd, Time, TimeStart} from '../../../shared/interfaces'
 import {MatDialogRef} from '@angular/material/dialog'
-import { TeamStore } from '../../../shared/store'
+import {TeamStore} from '../../../shared/store'
 import {TypedForm} from '../../../shared/types'
 import {BehaviorSubject} from 'rxjs'
 
 const TIME = {
   START: [
-    '8',
-    '08:50',
-    '10',
-    '10:50',
-    '19',
-    '19:50',
-    '21',
-    '21:50',
+    '8h',
+    '8h:50m',
+    '10h',
+    '10h:50m',
+    '19h',
+    '19h:50m',
+    '21h',
+    '21h:50m',
   ] as TimeStart[],
   END: [
-    '08:50',
-    '09:40',
-    '10:50',
-    '11:30',
-    '19:50',
-    '20:40',
-    '21:50',
-    '22:30',
+    '8h:50m',
+    '9h:40m',
+    '10h:50m',
+    '11h:30m',
+    '19h:50m',
+    '20h:40m',
+    '21h:50m',
+    '22h:30m',
   ] as TimeEnd[],
 }
 
@@ -51,8 +51,8 @@ export class ScheduleComponent implements OnInit {
     // dtstart: new FormControl(null, Validators.required),
     // until: new FormControl(null, Validators.required),
     time: new FormGroup<TypedForm<Time>>({
-      start: new FormControl('19', [Validators.required]),
-      end: new FormControl('20:40', [Validators.required]),
+      start: new FormControl('19h', [Validators.required]),
+      end: new FormControl('20h:40m', [Validators.required]),
     }),
     interval: new FormControl(1, [
       Validators.required,
@@ -80,31 +80,31 @@ export class ScheduleComponent implements OnInit {
 
     startControl.valueChanges.subscribe((start) => {
       if (start) this.#timeEnd.next(this.getTimeEnds(start as TimeStart))
-      if (start === '08:50') endControl.setValue('09:40')
-      if (start === '19:50') endControl.setValue('20:40')
-      if (start === '21:50') endControl.setValue('22:30')
-      if (start === '10:50') endControl.setValue('11:30')
+      if (start === '8h:50m') endControl.setValue('9h:40m')
+      if (start === '19h:50m') endControl.setValue('20h:40m')
+      if (start === '21h:50m') endControl.setValue('22h:30m')
+      if (start === '10h:50m') endControl.setValue('11h:30m')
     })
   }
 
   getTimeEnds(start: TimeStart): TimeEnd[] {
     switch (start) {
-      case '8':
-        return ['08:50', '09:40']
-      case '08:50':
-        return ['09:40']
-      case '10':
-        return ['10:50', '11:30']
-      case '10:50':
-        return ['11:30']
-      case '19':
-        return ['19:50', '20:40']
-      case '19:50':
-        return ['20:40']
-      case '21':
-        return ['21:50', '22:30']
-      case '21:50':
-        return ['22:30']
+      case '8h':
+        return ['8h:50m', '9h:40m']
+      case '8h:50m':
+        return ['9h:40m']
+      case '10h':
+        return ['10h:50m', '11h:30m']
+      case '10h:50m':
+        return ['11h:30m']
+      case '19h':
+        return ['19h:50m', '20h:40m']
+      case '19h:50m':
+        return ['20h:40m']
+      case '21h':
+        return ['21h:50m', '22h:30m']
+      case '21h:50m':
+        return ['22h:30m']
     }
   }
 

@@ -104,4 +104,24 @@ strong {
   &.space-between {
     justify-content: space-between;
   }
+
+  &.gap-8 {
+    column-gap: 8px;
+  }
+
+  &.gap-16 {
+    column-gap: 16px;
+  }
+}
+
+.fixed {
+  position: fixed;
+
+  &.bottom {
+    bottom: 20px;
+  }
+
+  &.right {
+    right: 20px;
+  }
 }

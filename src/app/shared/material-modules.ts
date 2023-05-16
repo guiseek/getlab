@@ -13,10 +13,12 @@ import {MatCardModule} from '@angular/material/card'
 import {MatMenuModule} from '@angular/material/menu'
 import {MatListModule} from '@angular/material/list'
 import {MatTableModule} from '@angular/material/table'
+import {ClipboardModule} from '@angular/cdk/clipboard'
 import {LayoutModule} from '@angular/cdk/layout'
 
 export const MATERIAL_MODULES = [
   LayoutModule,
+  ClipboardModule,
   MatToolbarModule,
   MatDialogModule,
   MatButtonModule,

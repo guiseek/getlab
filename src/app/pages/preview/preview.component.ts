@@ -45,21 +45,25 @@ export class PreviewComponent implements AfterViewInit {
     return this.previewForm.controls.schedules.value
   }
 
+  parsedControl = new FormControl('', [Validators.required])
+
   constructor(readonly scheduleStore: ScheduleStore) {
     this.scheduleStore.load()
   }
 
   ngAfterViewInit(): void {
-    queueMicrotask(() => {
-      if (this.picker) {
-        this.picker.open()
-      }
-    })
+    // queueMicrotask(() => {
+    //   if (this.picker) {
+    //     this.picker.open()
+    //   }
+    // })
 
     this.previewForm.valueChanges.subscribe(({schedules, dtstart, until}) => {
       if (schedules && dtstart && until) {
         this.spreadsheet.build(schedules, {dtstart, until})
+        const csv = this.spreadsheet.parse(this.spreadsheet.rows)
         this.#dataSource.next(this.spreadsheet.rows)
+        this.parsedControl.setValue(csv)
 
         // const spreadsheet = new Spreadsheet(schedules, {dtstart, until})
         // console.log(spreadsheet)
