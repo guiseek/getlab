@@ -1,0 +1,184 @@
+<form [formGroup]="scheduleForm" novalidate (ngSubmit)="onSubmit()">
+  <mat-card class="shipping-card">
+    <mat-card-header>
+      <mat-card-title>Solicitação de reserva</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="row">
+        <mat-form-field class="col">
+          <mat-label>Turma</mat-label>
+          <mat-select formControlName="team">
+            <mat-option
+              *ngFor="let team of teamStore.data$ | async"
+              [value]="team"
+            >
+              {{ team.team }} ({{ team.name }})
+            </mat-option>
+          </mat-select>
+          <mat-error>Selecione a turma</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <mat-form-field class="col">
+          <mat-label>Dia da semana</mat-label>
+          <mat-select formControlName="byweekday">
+            <mat-option *ngFor="let day of daysOfWeek" [value]="day">
+              {{ day | weekday }}
+            </mat-option>
+          </mat-select>
+          <mat-icon matPrefix class="mat-muted">event</mat-icon>
+          <mat-error>Selecione o dia da semana</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="col">
+          <mat-label>Período</mat-label>
+          <mat-date-range-input
+            [formGroup]="scheduleForm"
+            [rangePicker]="picker"
+          >
+            <input
+              matStartDate
+              formControlName="dtstart"
+              placeholder="Data inicial"
+            />
+            <input
+              matEndDate
+              formControlName="until"
+              placeholder="Data final"
+            />
+          </mat-date-range-input>
+          <mat-datepicker-toggle matIconSuffix [for]="picker" />
+          <mat-date-range-picker #picker />
+
+          <mat-error>Obrigatório</mat-error>
+          <mat-error
+            *ngIf="
+              scheduleForm.controls.dtstart.hasError('matStartDateInvalid')
+            "
+          >
+            Data inicial inválida
+          </mat-error>
+          <mat-error
+            *ngIf="scheduleForm.controls.until.hasError('matEndDateInvalid')"
+          >
+            Data final inválida
+          </mat-error>
+        </mat-form-field>
+
+        <!-- <mat-form-field class="full-width">
+            <input matInput placeholder="Company" formControlName="byweekday" />
+          </mat-form-field> -->
+      </div>
+
+      <div class="row" formGroupName="time">
+        <mat-form-field class="col">
+          <mat-label>Horário inicial</mat-label>
+          <mat-select formControlName="start" required>
+            <mat-option *ngFor="let time of timeStart$ | async" [value]="time">
+              {{ time }}
+            </mat-option>
+          </mat-select>
+          <mat-icon matPrefix class="mat-muted">schedule</mat-icon>
+          <mat-error>Horário inicial obrigatório</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="col">
+          <mat-label>Horário final</mat-label>
+          <mat-select formControlName="end" required>
+            <mat-option *ngFor="let time of timeEnd$ | async" [value]="time">
+              {{ time }}
+            </mat-option>
+          </mat-select>
+          <mat-icon matPrefix class="mat-muted">schedule</mat-icon>
+          <mat-error>Horário final obrigatório</mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="First name" formControlName="firstName">
+            <mat-error *ngIf="scheduleForm.controls['firstName'].hasError('required')">
+              First name is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Last name" formControlName="lastName">
+            <mat-error *ngIf="scheduleForm.controls['lastName'].hasError('required')">
+              Last name is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <textarea matInput placeholder="Address" formControlName="schedule"></textarea>
+            <mat-error *ngIf="scheduleForm.controls['schedule'].hasError('required')">
+              Address is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row" *ngIf="!hasUnitNumber">
+        <div class="col">
+          <button mat-button type="button" (click)="hasUnitNumber = !hasUnitNumber">
+            + Add C/O, Apt, Suite, Unit
+          </button>
+        </div>
+      </div>
+      <div class="row" *ngIf="hasUnitNumber">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <textarea matInput placeholder="Address 2" formControlName="schedule2"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="City" formControlName="city">
+            <mat-error *ngIf="scheduleForm.controls['city'].hasError('required')">
+              City is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-select placeholder="State" formControlName="state">
+              <mat-option *ngFor="let state of states" [value]="state.abbreviation">
+                {{ state.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="scheduleForm.controls['state'].hasError('required')">
+              State is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput #postalCode maxlength="5" placeholder="Postal Code" type="number" formControlName="postalCode">
+            <mat-hint align="end">{{postalCode.value.length}} / 5</mat-hint>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-radio-group formControlName="shipping">
+            <mat-radio-button value="free">Free Shipping</mat-radio-button>
+            <mat-radio-button value="priority">Priority Shipping</mat-radio-button>
+            <mat-radio-button value="nextday">Next Day Shipping</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div> -->
+    </mat-card-content>
+    <mat-card-actions class="flex row-reverse space-between">
+      <button mat-raised-button color="primary" type="submit">Submit</button>
+      <button mat-stroked-button mat-dialog-close type="button">Fechar</button>
+    </mat-card-actions>
+  </mat-card>
+</form>
