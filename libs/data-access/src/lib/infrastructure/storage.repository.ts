@@ -8,8 +8,6 @@ export class StorageRepository<T = unknown> {
 
   protected get data(): T[] {
     const data = this.storage.getItem(this.name);
-    console.log(data);
-
     const parsed = JSON.parse(data ?? '[]') as T[];
     if (parsed.length === 0) this.data = [];
     return parsed;

@@ -1,5 +1,6 @@
 import { Schedule, ScheduleRepository } from '@getlab/domain';
 import { StorageRepository } from './storage.repository';
+import { refactorSchedule } from '../mappers';
 
 export class ScheduleStorageRepositoryImpl
   extends StorageRepository<Schedule>
@@ -43,7 +44,17 @@ export class ScheduleStorageRepositoryImpl
   }
 
   findAll() {
-    return Promise.resolve(this.read());
+    let data = this.read();
+
+    const isOutdated = 'time' in data[0];
+
+    data = data.map(refactorSchedule);
+
+    if (isOutdated) {
+      this.rewrite(data);
+    }
+
+    return Promise.resolve(data);
   }
 
   #findIndex(id: string) {
