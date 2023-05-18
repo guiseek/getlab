@@ -3,9 +3,10 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "build": "nx affected:build"
+    "build": "nx run getlab:build",
+    "nx": "npx nx"
   },
-  "private": true,
+  "private": false,
   "devDependencies": {
     "@angular-devkit/build-angular": "~16.0.0",
     "@angular-devkit/core": "~16.0.0",
