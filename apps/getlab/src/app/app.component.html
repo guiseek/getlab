@@ -1,0 +1,11 @@
+<h1>Welcome getlab</h1>
+
+<pre>
+  {{facade.data$ | async | json}}
+</pre>
+
+<button (click)="facade.load()">
+  Carregar
+</button>
+
+<router-outlet></router-outlet>
