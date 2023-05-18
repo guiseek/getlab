@@ -1,0 +1,141 @@
+<mat-toolbar color="accent">
+  <h2>Planilha</h2>
+</mat-toolbar>
+
+<section>
+  <mat-card>
+    <form class="row" [formGroup]="spreadsheetForm">
+      <mat-form-field class="col" appearance="outline">
+        <mat-label>Período</mat-label>
+        <mat-date-range-input
+          [formGroup]="spreadsheetForm"
+          [rangePicker]="picker"
+        >
+          <input
+            matStartDate
+            formControlName="dtstart"
+            placeholder="Data inicial"
+          />
+          <input matEndDate formControlName="until" placeholder="Data final" />
+        </mat-date-range-input>
+        <mat-datepicker-toggle matIconSuffix [for]="picker" />
+        <mat-date-range-picker #picker (closed)="scheduleRef.open()" />
+
+        <mat-error>Obrigatório</mat-error>
+        <mat-error
+          *ngIf="spreadsheetForm.controls.dtstart.hasError('matStartDateInvalid')"
+        >
+          Data inicial inválida
+        </mat-error>
+        <mat-error
+          *ngIf="spreadsheetForm.controls.until.hasError('matEndDateInvalid')"
+        >
+          Data final inválida
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="col" appearance="outline">
+        <mat-label>Reservas</mat-label>
+        <mat-select #scheduleRef formControlName="schedules" multiple>
+          <mat-select-trigger>
+            {{schedules?.[0]?.byweekday! | weekday }}
+            <span
+              *ngIf="(schedules?.length || 0) > 1"
+              class="example-additional-selection"
+            >
+              (+{{ (schedules?.length || 0) - 1 }} {{ schedules?.length === 2 ?
+              'outro dia' : 'outros dias' }})
+            </span>
+          </mat-select-trigger>
+          <mat-option
+            *ngFor="let schedule of scheduleFacade.data$ | async"
+            [value]="schedule"
+          >
+            <span [ngPlural]="schedule.interval">
+              <ng-template ngPluralCase="=1">
+                <span>Toda</span>
+                <strong>{{ schedule.byweekday | weekday }}</strong>
+              </ng-template>
+              <ng-template ngPluralCase="=2">
+                <span>Uma</span>
+                <strong>{{ schedule.byweekday | weekday }}</strong>
+                <span>sim e outra não</span>
+              </ng-template>
+              <ng-template ngPluralCase="few">
+                <span>A cada {{ schedule.interval }}</span>
+                <strong>{{ schedule.byweekday | weekday }}s</strong>
+              </ng-template>
+
+              <span>das</span>
+              <strong>{{ schedule.timeStart }}</strong>
+              <span>até</span>
+              <strong>{{ schedule.timeEnd }}</strong>
+            </span>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </mat-card>
+
+  <mat-card>
+    <table mat-table [dataSource]="spreadsheetFacade.data$">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>#</th>
+        <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>Date</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.date | date : 'shortDate' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="time">
+        <th mat-header-cell *matHeaderCellDef>Horário</th>
+        <td mat-cell *matCellDef="let element">{{ element.time }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="ref">
+        <th mat-header-cell *matHeaderCellDef>Turma</th>
+        <td mat-cell *matCellDef="let element">{{ element.ref }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="people">
+        <th mat-header-cell *matHeaderCellDef>N° de alunos</th>
+        <td mat-cell *matCellDef="let element">{{ element.people }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="goal">
+        <th mat-header-cell *matHeaderCellDef>Finalidade</th>
+        <td mat-cell *matCellDef="let element">{{ element.goal }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columns$ | async"></tr>
+      <tr mat-row *matRowDef="let row; columns: columns$ | async"></tr>
+    </table>
+  </mat-card>
+
+  <div
+    *ngIf="spreadsheetFacade.parsed$ | async as parsed"
+    class="flex right gap-16 fixed bottom"
+  >
+    <button
+      mat-raised-button
+      [disabled]="!parsed.length"
+      [cdkCopyToClipboard]="parsed ?? ''"
+    >
+      <mat-icon>content_copy</mat-icon>
+      Copiar para área de transferência
+    </button>
+    <button
+      color="primary"
+      mat-raised-button
+      [disabled]="!parsed.length"
+      (click)="spreadsheetFacade.download()"
+    >
+      <mat-icon>description</mat-icon>
+      Download em CSV
+    </button>
+  </div>
+</section>

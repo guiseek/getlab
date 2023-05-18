@@ -1,5 +1,6 @@
 import { ScheduleStorageRepositoryImpl } from './infrastructure/schedule-storage.repository.impl';
 import { TeamStorageRepositoryImpl } from './infrastructure/team-storage.repository.impl';
+import { SpreadsheetFacade } from './application/spreadsheet.facade';
 import { ScheduleFacade } from './application/schedule.facade';
 import { TeamFacade } from './application/team.facade';
 import { Token, di } from '@getlab/util-core';
@@ -15,6 +16,9 @@ import {
   RemoveScheduleByIdUseCase,
   UpdateScheduleUseCase,
   UpdateTeamUseCase,
+  BuildSpreadsheetUseCase,
+  DownloadSpreadsheetUseCase,
+  ParseSpreadsheetUseCase,
 } from '@getlab/domain';
 
 const STORAGE_TOKEN = new Token('storage');
@@ -94,6 +98,18 @@ export const providers = {
         key: RemoveScheduleByIdUseCase,
         use: RemoveScheduleByIdUseCase,
         add: [ScheduleRepository],
+      },
+      {
+        key: BuildSpreadsheetUseCase,
+        use: BuildSpreadsheetUseCase,
+      },
+      {
+        key: DownloadSpreadsheetUseCase,
+        use: DownloadSpreadsheetUseCase,
+      },
+      {
+        key: ParseSpreadsheetUseCase,
+        use: ParseSpreadsheetUseCase,
       }
     );
   },
@@ -118,6 +134,15 @@ export const providers = {
           UpdateScheduleUseCase,
           FindAllSchedulesUseCase,
           RemoveScheduleByIdUseCase,
+        ],
+      },
+      {
+        key: SpreadsheetFacade,
+        use: SpreadsheetFacade,
+        add: [
+          BuildSpreadsheetUseCase,
+          DownloadSpreadsheetUseCase,
+          ParseSpreadsheetUseCase,
         ],
       }
     );

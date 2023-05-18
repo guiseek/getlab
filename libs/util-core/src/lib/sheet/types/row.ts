@@ -1,7 +1,7 @@
 export interface Row {
   id: string
   name: string
-  team: string
+  ref: string
   people: number
   goal: string
   date: Date

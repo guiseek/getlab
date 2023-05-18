@@ -1,3 +1,4 @@
+export * from './lib/application/spreadsheet.facade';
 export * from './lib/application/schedule.facade';
 export * from './lib/application/team.facade';
 export * from './lib/providers';

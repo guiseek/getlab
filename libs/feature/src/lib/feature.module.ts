@@ -8,6 +8,7 @@ import { TeamContainer } from './containers/team/team.container';
 import { ScheduleContainer } from './containers/schedule/schedule.container';
 import { ReactiveFormsModule } from '@angular/forms';
 import { WeekdayPipe } from './pipes/weekday.pipe';
+import { SpreadsheetContainer } from './containers/spreadsheet/spreadsheet.container';
 
 @NgModule({
   imports: [
@@ -16,6 +17,12 @@ import { WeekdayPipe } from './pipes/weekday.pipe';
     ReactiveFormsModule,
     RouterModule.forChild(featureRoutes),
   ],
-  declarations: [FeatureComponent, TeamContainer, ScheduleContainer, WeekdayPipe],
+  declarations: [
+    FeatureComponent,
+    TeamContainer,
+    ScheduleContainer,
+    WeekdayPipe,
+    SpreadsheetContainer,
+  ],
 })
 export class FeatureModule {}

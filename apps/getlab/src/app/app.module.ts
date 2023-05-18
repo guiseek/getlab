@@ -1,15 +1,11 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
-import { providers } from '@getlab/data-access';
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 
+import { appProviders } from './app.providers';
 import { AppComponent } from './app.component';
 import { appRoutes } from './app.routes';
-
-providers.infrastructure()
-providers.useCases()
-providers.application()
 
 @NgModule({
   declarations: [AppComponent],
@@ -18,7 +14,9 @@ providers.application()
     RouterModule.forRoot(appRoutes, { initialNavigation: 'enabledBlocking' }),
     BrowserAnimationsModule,
   ],
-  providers: [providers.transfer()],
+  providers: [
+    appProviders()
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
