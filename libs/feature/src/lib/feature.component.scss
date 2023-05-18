@@ -1,0 +1,36 @@
+:host {
+  display: block;
+  height: 100%;
+  .sidenav-container {
+    height: 100%;
+  }
+  .sidenav-content {
+    height: 100%;
+  }
+
+  .brand {
+    font-family: 'Varela Round', sans-serif;
+    font-size: 2rem;
+    font-weight: 600;
+  }
+
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidenav {
+    width: 250px;
+  }
+
+  .sidenav .mat-toolbar {
+    background: inherit;
+  }
+
+  .mat-toolbar.mat-primary {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+}

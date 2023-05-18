@@ -1,0 +1,51 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    fixedInViewport
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="(isHandset$ | async) === false"
+  >
+    <mat-toolbar>
+      <h1>GetLab</h1>
+    </mat-toolbar>
+    <mat-divider></mat-divider>
+    <mat-nav-list>
+      <!-- <a mat-list-item routerLink="/dashboard" routerLinkActive="active">
+        <mat-icon matListItemIcon>dashboard</mat-icon>
+        <span>Dashboard</span>
+      </a>
+      <a mat-list-item routerLink="/preview" routerLinkActive="active">
+        <mat-icon matListItemIcon>checklist_rtl</mat-icon>
+        <span>Planilha</span>
+      </a> -->
+      <a mat-list-item routerLink="/turmas" routerLinkActive="active">
+        <mat-icon matListItemIcon>group_add</mat-icon>
+        <span>Turmas</span>
+      </a>
+      <a mat-list-item routerLink="/reservas" routerLinkActive="active">
+        <mat-icon matListItemIcon>developer_mode</mat-icon>
+        <span> Reservas </span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="sidenav-content">
+    <mat-toolbar color="primary">
+      <button
+        type="button"
+        aria-label="Alternar menu de navegação"
+        mat-icon-button
+        (click)="drawer.toggle()"
+        *ngIf="isHandset$ | async"
+      >
+        <mat-icon aria-label="Ícone para alternar navegação">menu</mat-icon>
+      </button>
+      <h3 class="brand">{{ title }}</h3>
+    </mat-toolbar>
+    <main>
+      <router-outlet></router-outlet>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

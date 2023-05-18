@@ -13,6 +13,8 @@ import {
   CreateScheduleUseCase,
   FindAllSchedulesUseCase,
   RemoveScheduleByIdUseCase,
+  UpdateScheduleUseCase,
+  UpdateTeamUseCase,
 } from '@getlab/domain';
 
 const STORAGE_TOKEN = new Token('storage');
@@ -54,6 +56,11 @@ export const providers = {
         add: [TeamRepository],
       },
       {
+        key: UpdateTeamUseCase,
+        use: UpdateTeamUseCase,
+        add: [TeamRepository],
+      },
+      {
         key: FindAllTeamsUseCase,
         use: FindAllTeamsUseCase,
         add: [TeamRepository],
@@ -71,6 +78,11 @@ export const providers = {
       {
         key: CreateScheduleUseCase,
         use: CreateScheduleUseCase,
+        add: [ScheduleRepository],
+      },
+      {
+        key: UpdateScheduleUseCase,
+        use: UpdateScheduleUseCase,
         add: [ScheduleRepository],
       },
       {
@@ -92,6 +104,7 @@ export const providers = {
         use: TeamFacade,
         add: [
           CreateTeamUseCase,
+          UpdateTeamUseCase,
           FindAllTeamsUseCase,
           FindTeamByIdUseCase,
           RemoveTeamByIdUseCase,
@@ -102,6 +115,7 @@ export const providers = {
         use: ScheduleFacade,
         add: [
           CreateScheduleUseCase,
+          UpdateScheduleUseCase,
           FindAllSchedulesUseCase,
           RemoveScheduleByIdUseCase,
         ],

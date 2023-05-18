@@ -7,7 +7,6 @@ export class TeamStorageRepositoryImpl
 {
   createOne(input: Team) {
     const teams = this.read();
-    console.log(teams);
 
     const team = { ...input, id: crypto.randomUUID() };
 

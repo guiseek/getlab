@@ -28,10 +28,8 @@ const SCHEDULES: Schedule[] = [
     id: '1',
     team: TEAMS[0],
     byweekday: 2,
-    time: {
-      start: '19h',
-      end: '20h:40m',
-    },
+    timeStart: '19h',
+    timeEnd: '20h:40m',
     interval: 1,
   },
 ];
@@ -88,7 +86,6 @@ describe('Data Access', () => {
       jest.spyOn(facade, 'createTeam');
 
       facade.createTeam({
-        id: '2',
         name: 'Guilherme',
         ref: 'ADSIS5S-NA',
         goal: 'Desenvolvimento',

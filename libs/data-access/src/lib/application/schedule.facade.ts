@@ -1,6 +1,9 @@
 import {
   Schedule,
+  CreateScheduleDto,
+  UpdateScheduleDto,
   CreateScheduleUseCase,
+  UpdateScheduleUseCase,
   FindAllSchedulesUseCase,
   RemoveScheduleByIdUseCase,
 } from '@getlab/domain';
@@ -19,6 +22,7 @@ export class ScheduleFacade extends Store<ScheduleState> {
 
   constructor(
     private readonly createUseCase: CreateScheduleUseCase,
+    private readonly updateUseCase: UpdateScheduleUseCase,
     private readonly findAllUseCase: FindAllSchedulesUseCase,
     private readonly removeByIdUseCase: RemoveScheduleByIdUseCase
   ) {
@@ -33,9 +37,17 @@ export class ScheduleFacade extends Store<ScheduleState> {
     this.findAllUseCase.execute().then((data) => this.setState({ data }));
   }
 
-  createSchedule(schedule: Schedule) {
+  createSchedule(schedule: CreateScheduleDto) {
     this.createUseCase.execute(schedule).then((schedule) => {
       this.setState({ schedule });
+      this.load();
+    });
+  }
+
+  updateSchedule(schedule: UpdateScheduleDto) {
+    this.updateUseCase.execute(schedule).then((schedule) => {
+      this.setState({ schedule });
+      this.load();
     });
   }
 
