@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TeamFacade } from '@getlab/data-access';
+import { ScheduleFacade, TeamFacade } from '@getlab/data-access';
 
 @Component({
   selector: 'getlab-root',
@@ -8,6 +8,7 @@ import { TeamFacade } from '@getlab/data-access';
 })
 export class AppComponent {
   constructor(
-    readonly facade: TeamFacade
+    readonly facade: TeamFacade,
+    readonly scheduleFacade: ScheduleFacade,
   ) {}
 }

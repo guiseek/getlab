@@ -3,8 +3,15 @@
 <pre>
   {{facade.data$ | async | json}}
 </pre>
+<pre>
+  {{scheduleFacade.data$ | async | json}}
+</pre>
 
 <button (click)="facade.load()">
+  Carregar
+</button>
+
+<button (click)="scheduleFacade.load()">
   Carregar
 </button>
 

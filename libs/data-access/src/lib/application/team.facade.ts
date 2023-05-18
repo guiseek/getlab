@@ -19,9 +19,9 @@ export class TeamFacade extends Store<TeamState> {
   data$ = this.select((state) => state.data);
 
   constructor(
+    private readonly createUseCase: CreateTeamUseCase,
     private readonly findAllUseCase: FindAllTeamsUseCase,
     private readonly findByIdUseCase: FindTeamByIdUseCase,
-    private readonly createUseCase: CreateTeamUseCase,
     private readonly removeByIdUseCase: RemoveTeamByIdUseCase
   ) {
     super({

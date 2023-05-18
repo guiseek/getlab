@@ -1,26 +1,58 @@
-import { Team, TeamRepository } from '@getlab/domain';
+import { ScheduleMockRepositoryImpl } from './infrastructure/schedule-mock.repository.impl';
 import { TeamMockRepositoryImpl } from './infrastructure/team-mock.repository.impl';
+import {
+  Team,
+  Schedule,
+  TeamRepository,
+  ScheduleRepository,
+} from '@getlab/domain';
 import { Token, di } from '@getlab/util-core';
 import { TeamFacade } from './application/team.facade';
 import { providers } from './providers';
 
 const TEAM_MOCK_TOKEN = new Token<Team[]>('team.mock');
+const SCHEDULE_MOCK_TOKEN = new Token<Schedule[]>('schedule.mock');
+
+const TEAMS = [
+  {
+    id: '1',
+    name: 'Guilherme',
+    ref: 'ESOFT7S-NA',
+    goal: 'Desenvolvimento',
+    people: 30,
+  },
+];
+
+const SCHEDULES: Schedule[] = [
+  {
+    id: '1',
+    team: TEAMS[0],
+    byweekday: 2,
+    time: {
+      start: '19h',
+      end: '20h:40m',
+    },
+    interval: 1,
+  },
+];
+
 di.register(
   {
     key: TEAM_MOCK_TOKEN,
-    use: [
-      {
-        id: '1',
-        name: 'Guilherme',
-        ref: 'ESOFT7S-NA',
-        goal: 'Desenvolvimento',
-        people: 30,
-      },
-    ],
+    use: TEAMS,
+  },
+  {
+    key: SCHEDULE_MOCK_TOKEN,
+    use: SCHEDULES,
   },
   {
     key: TeamRepository,
     use: TeamMockRepositoryImpl,
+    add: [TEAM_MOCK_TOKEN],
+  },
+  {
+    key: ScheduleRepository,
+    use: ScheduleMockRepositoryImpl,
     add: [TEAM_MOCK_TOKEN],
   }
 );
