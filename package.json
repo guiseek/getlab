@@ -4,7 +4,8 @@
   "license": "MIT",
   "scripts": {
     "build": "nx run getlab:build",
-    "nx": "npx nx"
+    "nx": "npx nx",
+    "start": "npx nx serve getlab"
   },
   "private": false,
   "devDependencies": {
