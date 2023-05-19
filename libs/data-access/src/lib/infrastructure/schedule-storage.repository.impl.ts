@@ -47,6 +47,7 @@ export class ScheduleStorageRepositoryImpl
     let data = this.read();
 
     const isOutdated = 'time' in (data[0] ?? {});
+    // const isOutdated = 'time' in (data[0] ?? Object); 
 
     data = data.map(refactorSchedule);
 
