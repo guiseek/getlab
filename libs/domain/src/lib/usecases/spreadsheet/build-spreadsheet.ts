@@ -1,8 +1,8 @@
-import { BuildSpreadsheetDto, DateRangeDto } from '../../dtos';
 import { Frequency, RRule, Options } from 'rrule';
+import { BuildSpreadsheetDto } from '../../dtos';
 import { SpreadsheetRow } from '../../entities';
-import { UseCase } from '../../base/use-case';
 import { Schedule } from '../../entities';
+import { UseCase } from '../../base/use-case';
 
 export class BuildSpreadsheetUseCase
   implements UseCase<BuildSpreadsheetDto, SpreadsheetRow[]>

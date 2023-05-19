@@ -1,4 +1,4 @@
-import { Schedule, ScheduleRepository, Time } from '@getlab/domain';
+import { Schedule, Time } from '@getlab/domain';
 import { refactorTeam } from './refactor-team';
 
 export const refactorSchedule = <T extends Schedule>(
