@@ -42,6 +42,13 @@ export class ScheduleContainer {
     this.scheduleForm.onInit();
     this.scheduleFacade.load();
     this.teamFacade.load();
+    this.teamFacade.hasNoTeams$.subscribe((hasNoTeams) => {
+      if (hasNoTeams) {
+        this.scheduleForm.disable();
+      } else {
+        this.scheduleForm.enable();
+      }
+    });
   }
 
   onSubmit() {

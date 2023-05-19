@@ -2,6 +2,7 @@
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
 @use './scss/palette' as app;
+@use 'sass:map';
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -55,12 +56,32 @@ body {
   .mat-mdc-card-title {
     font-family: 'Varela Round', sans-serif;
     font-weight: 400;
-    font-size: 120%;
+    // font-size: 120%;
     line-height: 100%;
   }
 }
 
-.mat-mdc-card {
+figure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+.text-center {
+  text-align: center;
+}
+
+.navy {
+  color: map.get(app.$navy, 500);
+  fill: map.get(app.$navy, 500);
+}
+
+.overflow-hidden {
   overflow: hidden;
 }
 
@@ -78,7 +99,7 @@ body {
 }
 
 .cdk-cell {
-  text-transform: capitalize;
+  // text-transform: capitalize;
 }
 .cdk-column-ref,
 .cdk-column-team {
@@ -107,11 +128,45 @@ strong {
   display: flex;
   flex-flow: row wrap;
   margin-bottom: 8px;
-  column-gap: 20px;
+  column-gap: 16px;
+  row-gap: 16px;
 }
 
 .col {
   flex: 1;
+}
+
+.minw {
+  &-100 {
+    min-width: 100px;
+  }
+  &-150 {
+    min-width: 150px;
+  }
+  &-200 {
+    min-width: 200px;
+  }
+  &-250 {
+    min-width: 250px;
+  }
+  &-300 {
+    min-width: 300px;
+  }
+  &-350 {
+    min-width: 350px;
+  }
+  &-400 {
+    min-width: 400px;
+  }
+  &-450 {
+    min-width: 450px;
+  }
+  &-500 {
+    min-width: 500px;
+  }
+  &-550 {
+    min-width: 550px;
+  }
 }
 
 .col:last-child {
@@ -121,11 +176,18 @@ strong {
 .flex {
   display: flex;
 
+  &.wrap {
+    flex-flow: row wrap;
+  }
+
   &.row-reverse {
     flex-direction: row-reverse;
   }
   &.space-between {
     justify-content: space-between;
+  }
+  &.align-center {
+    align-items: center;
   }
 
   &.gap-8 {
@@ -134,6 +196,42 @@ strong {
 
   &.gap-16 {
     column-gap: 16px;
+  }
+
+  &.gap-24 {
+    column-gap: 24px;
+  }
+
+  &.gap-32 {
+    column-gap: 32px;
+  }
+
+  &.col {
+    flex-direction: column;
+
+    &.wrap {
+      flex-flow: column wrap;
+    }
+
+    &.align-center {
+      justify-content: center;
+    }
+
+    &.gap-8 {
+      row-gap: 8px;
+    }
+
+    &.gap-16 {
+      row-gap: 16px;
+    }
+
+    &.gap-24 {
+      row-gap: 24px;
+    }
+
+    &.gap-32 {
+      row-gap: 32px;
+    }
   }
 }
 

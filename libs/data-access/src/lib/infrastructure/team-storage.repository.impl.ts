@@ -1,5 +1,5 @@
-import { Team, TeamRepository } from '@getlab/domain';
 import { StorageRepository } from './storage.repository';
+import { Team, TeamRepository } from '@getlab/domain';
 import { refactorTeam } from '../mappers';
 
 export class TeamStorageRepositoryImpl
@@ -47,7 +47,7 @@ export class TeamStorageRepositoryImpl
   findAll() {
     let data = this.read();
 
-    const isOutdated = 'team' in data[0];
+    const isOutdated = 'team' in (data[0] ?? {});
 
     data = data.map(refactorTeam);
 

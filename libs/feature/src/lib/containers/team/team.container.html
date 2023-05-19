@@ -3,7 +3,7 @@
 </mat-toolbar>
 
 <section class="row">
-  <mat-card class="col">
+  <mat-card class="col minw-500 overflow-hidden">
     <table mat-table [dataSource]="teamFacade.data$">
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef>Id</th>
@@ -42,11 +42,11 @@
     </table>
   </mat-card>
 
-  <form class="col" [formGroup]="teamForm" novalidate (ngSubmit)="onSubmit()">
+  <form class="col minw-300" [formGroup]="teamForm" novalidate (ngSubmit)="onSubmit()">
     <mat-card>
       <mat-card-header>
         <mat-card-title>
-          {{teamForm.hasId ? 'Editar' : 'Nova'}} turma
+          {{teamForm.hasId ? 'Editar' : 'Cadastrar'}} turma
         </mat-card-title>
       </mat-card-header>
       <mat-card-content>
@@ -67,19 +67,19 @@
         </div>
 
         <div class="row">
-          <div class="col">
+          <section class="col">
             <mat-form-field>
-              <mat-label>Turma</mat-label>
+              <mat-label>Referência da turma</mat-label>
               <input
                 matInput
-                placeholder="Código da turma, ex.: ESOFT7S-N-A"
+                placeholder="ex.: ADSIS5S-N-A"
                 formControlName="ref"
                 name="ref"
               />
               <mat-error>Referência obrigatória</mat-error>
             </mat-form-field>
-          </div>
-          <div class="col">
+          </section>
+          <section class="col">
             <mat-form-field>
               <mat-label>N° de alunos</mat-label>
               <input
@@ -90,17 +90,17 @@
               />
               <mat-error>Mínimo 5 alunos</mat-error>
             </mat-form-field>
-          </div>
+          </section>
         </div>
         <div class="row">
-          <div class="col">
+          <section class="col">
             <mat-radio-group formControlName="goal">
               <mat-radio-button value="Desenvolvimento de Software">
                 Desenvolvimento de Software
               </mat-radio-button>
               <mat-radio-button value="Pesquisa">Pesquisa</mat-radio-button>
             </mat-radio-group>
-          </div>
+          </section>
         </div>
       </mat-card-content>
       <mat-card-actions class="flex row-reverse space-between">

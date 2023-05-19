@@ -2,78 +2,85 @@
   <h2>Planilha</h2>
 </mat-toolbar>
 
-<section>
+<section class="flex col gap-16">
   <mat-card>
     <form class="row" [formGroup]="spreadsheetForm">
-      <mat-form-field class="col" appearance="outline">
-        <mat-label>Período</mat-label>
-        <mat-date-range-input
-          [formGroup]="spreadsheetForm"
-          [rangePicker]="picker"
-        >
-          <input
-            matStartDate
-            formControlName="dtstart"
-            placeholder="Data inicial"
-          />
-          <input matEndDate formControlName="until" placeholder="Data final" />
-        </mat-date-range-input>
-        <mat-datepicker-toggle matIconSuffix [for]="picker" />
-        <mat-date-range-picker #picker (closed)="scheduleRef.open()" />
-
-        <mat-error>Obrigatório</mat-error>
-        <mat-error
-          *ngIf="spreadsheetForm.controls.dtstart.hasError('matStartDateInvalid')"
-        >
-          Data inicial inválida
-        </mat-error>
-        <mat-error
-          *ngIf="spreadsheetForm.controls.until.hasError('matEndDateInvalid')"
-        >
-          Data final inválida
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field class="col" appearance="outline">
-        <mat-label>Reservas</mat-label>
-        <mat-select #scheduleRef formControlName="schedules" multiple>
-          <mat-select-trigger>
-            {{schedules?.[0]?.byweekday! | weekday }}
-            <span
-              *ngIf="(schedules?.length || 0) > 1"
-              class="example-additional-selection"
-            >
-              (+{{ (schedules?.length || 0) - 1 }} {{ schedules?.length === 2 ?
-              'outro dia' : 'outros dias' }})
-            </span>
-          </mat-select-trigger>
-          <mat-option
-            *ngFor="let schedule of scheduleFacade.data$ | async"
-            [value]="schedule"
+      <section class="col minw-300">
+        <mat-form-field appearance="outline">
+          <mat-label>Período</mat-label>
+          <mat-date-range-input
+            [formGroup]="spreadsheetForm"
+            [rangePicker]="picker"
           >
-            <span [ngPlural]="schedule.interval">
-              <ng-template ngPluralCase="=1">
-                <span>Toda</span>
-                <strong>{{ schedule.byweekday | weekday }}</strong>
-              </ng-template>
-              <ng-template ngPluralCase="=2">
-                <span>Uma</span>
-                <strong>{{ schedule.byweekday | weekday }}</strong>
-                <span>sim e outra não</span>
-              </ng-template>
-              <ng-template ngPluralCase="few">
-                <span>A cada {{ schedule.interval }}</span>
-                <strong>{{ schedule.byweekday | weekday }}s</strong>
-              </ng-template>
+            <input
+              matStartDate
+              formControlName="dtstart"
+              placeholder="Data inicial"
+            />
+            <input
+              matEndDate
+              formControlName="until"
+              placeholder="Data final"
+            />
+          </mat-date-range-input>
+          <mat-datepicker-toggle matIconSuffix [for]="picker" />
+          <mat-date-range-picker #picker (closed)="scheduleRef.open()" />
 
-              <span>das</span>
-              <strong>{{ schedule.timeStart }}</strong>
-              <span>até</span>
-              <strong>{{ schedule.timeEnd }}</strong>
-            </span>
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+          <mat-error>Obrigatório</mat-error>
+          <mat-error
+            *ngIf="spreadsheetForm.controls.dtstart.hasError('matStartDateInvalid')"
+          >
+            Data inicial inválida
+          </mat-error>
+          <mat-error
+            *ngIf="spreadsheetForm.controls.until.hasError('matEndDateInvalid')"
+          >
+            Data final inválida
+          </mat-error>
+        </mat-form-field>
+      </section>
+      <section class="col minw-300">
+        <mat-form-field appearance="outline">
+          <mat-label>Reservas</mat-label>
+          <mat-select #scheduleRef formControlName="schedules" multiple>
+            <mat-select-trigger>
+              {{schedules?.[0]?.byweekday! | weekday }}
+              <span
+                *ngIf="(schedules?.length || 0) > 1"
+                class="example-additional-selection"
+              >
+                (+{{ (schedules?.length || 0) - 1 }} {{ schedules?.length === 2
+                ? 'outro dia' : 'outros dias' }})
+              </span>
+            </mat-select-trigger>
+            <mat-option
+              *ngFor="let schedule of scheduleFacade.data$ | async"
+              [value]="schedule"
+            >
+              <span [ngPlural]="schedule.interval">
+                <ng-template ngPluralCase="=1">
+                  <span>Toda</span>
+                  <strong>{{ schedule.byweekday | weekday }}</strong>
+                </ng-template>
+                <ng-template ngPluralCase="=2">
+                  <span>Uma</span>
+                  <strong>{{ schedule.byweekday | weekday }}</strong>
+                  <span>sim e outra não</span>
+                </ng-template>
+                <ng-template ngPluralCase="few">
+                  <span>A cada {{ schedule.interval }}</span>
+                  <strong>{{ schedule.byweekday | weekday }}s</strong>
+                </ng-template>
+
+                <span>das</span>
+                <strong>{{ schedule.timeStart }}</strong>
+                <span>até</span>
+                <strong>{{ schedule.timeEnd }}</strong>
+              </span>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </section>
     </form>
   </mat-card>
 
@@ -120,22 +127,26 @@
     *ngIf="spreadsheetFacade.parsed$ | async as parsed"
     class="flex right gap-16 fixed bottom"
   >
-    <button
-      mat-raised-button
-      [disabled]="!parsed.length"
-      [cdkCopyToClipboard]="parsed ?? ''"
-    >
-      <mat-icon>content_copy</mat-icon>
-      Copiar para área de transferência
-    </button>
-    <button
-      color="primary"
-      mat-raised-button
-      [disabled]="!parsed.length"
-      (click)="spreadsheetFacade.download()"
-    >
-      <mat-icon>description</mat-icon>
-      Download em CSV
-    </button>
+    <div class="col minw-100">
+      <button
+        mat-raised-button
+        [disabled]="!parsed.length"
+        [cdkCopyToClipboard]="parsed ?? ''"
+      >
+        <mat-icon>content_copy</mat-icon>
+        Copiar
+      </button>
+    </div>
+    <div class="col minw-100">
+      <button
+        color="primary"
+        mat-raised-button
+        [disabled]="!parsed.length"
+        (click)="spreadsheetFacade.download()"
+      >
+        <mat-icon>description</mat-icon>
+        Baixar
+      </button>
+    </div>
   </div>
 </section>

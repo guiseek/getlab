@@ -10,10 +10,12 @@ import { map, shareReplay } from 'rxjs';
 export class FeatureComponent {
   title = 'Laboratórios';
 
-  isHandset$ = this.bpObserver.observe(Breakpoints.Handset).pipe(
-    map((result) => result.matches),
-    shareReplay()
-  );
+  isHandset$ = this.bpObserver
+    .observe(Breakpoints.Handset)
+    .pipe(
+      map((result) => result.matches),
+      shareReplay()
+    );
 
   constructor(private bpObserver: BreakpointObserver) {}
 }

@@ -1,16 +1,16 @@
 import {
   SpreadsheetRow,
-  BuildSpreadsheetDto,
   ParseSpreadsheetDto,
+  BuildSpreadsheetDto,
+  ParseSpreadsheetUseCase,
   BuildSpreadsheetUseCase,
   DownloadSpreadsheetUseCase,
-  ParseSpreadsheetUseCase,
 } from '@getlab/domain';
 import { Store } from '../base/store';
 
 interface SpreadsheetState {
-  loading: boolean;
   data: SpreadsheetRow[];
+  loading: boolean;
   parsed: string;
 }
 
@@ -20,25 +20,27 @@ export class SpreadsheetFacade extends Store<SpreadsheetState> {
   data$ = this.select((state) => state.data);
 
   constructor(
+    private readonly parseUseCase: ParseSpreadsheetUseCase,
     private readonly buildUseCase: BuildSpreadsheetUseCase,
-    private readonly downloadUseCase: DownloadSpreadsheetUseCase,
-    private readonly parseUseCase: ParseSpreadsheetUseCase
+    private readonly downloadUseCase: DownloadSpreadsheetUseCase
   ) {
     super({
-      loading: false,
       data: [],
       parsed: '',
+      loading: false,
     });
   }
 
   build(value: BuildSpreadsheetDto) {
-    this.buildUseCase.execute(value).then((data) => this.setState({ data }));
+    this.buildUseCase.execute(value).then((data) => {
+      this.setState({ data });
+    });
   }
 
   parse(value: ParseSpreadsheetDto) {
-    this.parseUseCase
-      .execute(value)
-      .then((parsed) => this.setState({ parsed }));
+    this.parseUseCase.execute(value).then((parsed) => {
+      this.setState({ parsed });
+    });
   }
 
   download() {

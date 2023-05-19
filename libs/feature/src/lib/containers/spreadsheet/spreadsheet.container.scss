@@ -15,8 +15,16 @@
   .mat-mdc-card {
     overflow-x: auto;
 
+    .row {
+      row-gap: 8px;
+    }
+
     &:first-child {
-      padding: 24px 24px 0;
+      padding: 20px 20px 0;
+    }
+
+    .mat-mdc-form-field {
+      width: 100%;
     }
   }
 

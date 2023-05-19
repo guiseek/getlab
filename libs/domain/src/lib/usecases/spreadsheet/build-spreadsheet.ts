@@ -1,4 +1,4 @@
-import { BuildSpreadsheetDto, DateRangeDto } from '../../dtos';
+import { BuildSpreadsheetDto } from '../../dtos';
 import { Frequency, RRule, Options } from 'rrule';
 import { SpreadsheetRow } from '../../entities';
 import { UseCase } from '../../base/use-case';

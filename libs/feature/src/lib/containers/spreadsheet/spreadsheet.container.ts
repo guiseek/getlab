@@ -16,7 +16,7 @@ export class SpreadsheetContainer implements OnInit {
     map((result) => result.matches),
     map((match) => {
       return match
-        ? ['date', 'time', 'ref', 'people']
+        ? ['date', 'time', 'ref']
         : ['date', 'time', 'ref', 'people', 'goal'];
     }),
     shareReplay()

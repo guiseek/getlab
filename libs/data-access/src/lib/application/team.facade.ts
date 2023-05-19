@@ -20,6 +20,9 @@ export class TeamFacade extends Store<TeamState> {
   loading$ = this.select((state) => state.loading);
   team$ = this.select((state) => state.team);
   data$ = this.select((state) => state.data);
+  hasNoTeams$ = this.select((state) => {
+    return state.data.length === 0;
+  });
 
   constructor(
     private readonly createUseCase: CreateTeamUseCase,

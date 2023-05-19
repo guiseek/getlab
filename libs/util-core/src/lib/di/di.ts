@@ -10,7 +10,7 @@ const di = () => {
     return concrete;
   };
 
-  const set = <T>({ key, use, add = [] }: Provider<T>) => {
+  const set = <T>({ for: key, use, add = [] }: Provider<T>) => {
     relations.set(key, add.map(get));
 
     if (key instanceof Token) {
@@ -37,18 +37,9 @@ const di = () => {
   };
 
   const transfer = () => {
-    return providerList.map(({ key, use, add }) => {
-      return key instanceof Token
-        ? {
-            provide: key,
-            useValue: use,
-            deps: add ?? [],
-          }
-        : {
-            provide: key,
-            useClass: use,
-            deps: add ?? [],
-          };
+    return providerList.map(({ for: provide, use, add: deps = [] }) => {
+      const useKey = provide instanceof Token ? 'useValue' : 'useClass';
+      return { provide, deps, [useKey]: use };
     });
   };
 

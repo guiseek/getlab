@@ -3,7 +3,10 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "build": "nx run getlab:build",
+    "getlab:build": "nx run getlab:build",
+    "test": "nx affected:test",
+    "lint": "nx affected:lint",
+    "build": "nx affected:build",
     "nx": "npx nx"
   },
   "private": false,

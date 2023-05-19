@@ -13,7 +13,7 @@ export class UpdateScheduleUseCase
       const schedule = await this.repository.findOne(input.id);
       return this.repository.updateOne(input.id, { ...schedule, ...input });
     } catch (err) {
-      throw err;
+      throw `Não foi possível alterar o horário de aula ${input.id}`;
     }
   }
 }

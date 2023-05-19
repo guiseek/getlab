@@ -15,11 +15,11 @@ class ConcreteImpl implements Abstraction {
 
 di.register(
   {
-    key: NAME_TOKEN,
+    for: NAME_TOKEN,
     use: 'team',
   },
   {
-    key: Abstraction,
+    for: Abstraction,
     use: ConcreteImpl,
     add: [NAME_TOKEN],
   }

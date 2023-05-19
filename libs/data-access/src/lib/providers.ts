@@ -1,24 +1,24 @@
-import { ScheduleStorageRepositoryImpl } from './infrastructure/schedule-storage.repository.impl';
-import { TeamStorageRepositoryImpl } from './infrastructure/team-storage.repository.impl';
-import { SpreadsheetFacade } from './application/spreadsheet.facade';
-import { ScheduleFacade } from './application/schedule.facade';
-import { TeamFacade } from './application/team.facade';
+import { SpreadsheetFacade, ScheduleFacade, TeamFacade } from './application';
 import { Token, di } from '@getlab/util-core';
 import {
+  ScheduleStorageRepositoryImpl,
+  TeamStorageRepositoryImpl,
+} from './infrastructure';
+import {
   TeamRepository,
-  ScheduleRepository,
   CreateTeamUseCase,
+  UpdateTeamUseCase,
+  ScheduleRepository,
   FindAllTeamsUseCase,
   FindTeamByIdUseCase,
+  UpdateScheduleUseCase,
   RemoveTeamByIdUseCase,
   CreateScheduleUseCase,
+  ParseSpreadsheetUseCase,
+  BuildSpreadsheetUseCase,
   FindAllSchedulesUseCase,
   RemoveScheduleByIdUseCase,
-  UpdateScheduleUseCase,
-  UpdateTeamUseCase,
-  BuildSpreadsheetUseCase,
   DownloadSpreadsheetUseCase,
-  ParseSpreadsheetUseCase,
 } from '@getlab/domain';
 
 const STORAGE_TOKEN = new Token('storage');
@@ -29,24 +29,24 @@ export const providers = {
   infrastructure() {
     di.register(
       {
-        key: STORAGE_TOKEN,
+        for: STORAGE_TOKEN,
         use: localStorage,
       },
       {
-        key: TEAM_TOKEN,
+        for: TEAM_TOKEN,
         use: 'team',
       },
       {
-        key: TeamRepository,
+        for: TeamRepository,
         use: TeamStorageRepositoryImpl,
         add: [STORAGE_TOKEN, TEAM_TOKEN],
       },
       {
-        key: SCHEDULE_TOKEN,
+        for: SCHEDULE_TOKEN,
         use: 'schedule',
       },
       {
-        key: ScheduleRepository,
+        for: ScheduleRepository,
         use: ScheduleStorageRepositoryImpl,
         add: [STORAGE_TOKEN, SCHEDULE_TOKEN],
       }
@@ -55,60 +55,60 @@ export const providers = {
   useCases() {
     di.register(
       {
-        key: CreateTeamUseCase,
+        for: CreateTeamUseCase,
         use: CreateTeamUseCase,
         add: [TeamRepository],
       },
       {
-        key: UpdateTeamUseCase,
+        for: UpdateTeamUseCase,
         use: UpdateTeamUseCase,
         add: [TeamRepository],
       },
       {
-        key: FindAllTeamsUseCase,
+        for: FindAllTeamsUseCase,
         use: FindAllTeamsUseCase,
         add: [TeamRepository],
       },
       {
-        key: FindTeamByIdUseCase,
+        for: FindTeamByIdUseCase,
         use: FindTeamByIdUseCase,
         add: [TeamRepository],
       },
       {
-        key: RemoveTeamByIdUseCase,
+        for: RemoveTeamByIdUseCase,
         use: RemoveTeamByIdUseCase,
         add: [TeamRepository],
       },
       {
-        key: CreateScheduleUseCase,
+        for: CreateScheduleUseCase,
         use: CreateScheduleUseCase,
         add: [ScheduleRepository],
       },
       {
-        key: UpdateScheduleUseCase,
+        for: UpdateScheduleUseCase,
         use: UpdateScheduleUseCase,
         add: [ScheduleRepository],
       },
       {
-        key: FindAllSchedulesUseCase,
+        for: FindAllSchedulesUseCase,
         use: FindAllSchedulesUseCase,
         add: [ScheduleRepository],
       },
       {
-        key: RemoveScheduleByIdUseCase,
+        for: RemoveScheduleByIdUseCase,
         use: RemoveScheduleByIdUseCase,
         add: [ScheduleRepository],
       },
       {
-        key: BuildSpreadsheetUseCase,
+        for: BuildSpreadsheetUseCase,
         use: BuildSpreadsheetUseCase,
       },
       {
-        key: DownloadSpreadsheetUseCase,
+        for: DownloadSpreadsheetUseCase,
         use: DownloadSpreadsheetUseCase,
       },
       {
-        key: ParseSpreadsheetUseCase,
+        for: ParseSpreadsheetUseCase,
         use: ParseSpreadsheetUseCase,
       }
     );
@@ -116,7 +116,7 @@ export const providers = {
   application() {
     di.register(
       {
-        key: TeamFacade,
+        for: TeamFacade,
         use: TeamFacade,
         add: [
           CreateTeamUseCase,
@@ -127,7 +127,7 @@ export const providers = {
         ],
       },
       {
-        key: ScheduleFacade,
+        for: ScheduleFacade,
         use: ScheduleFacade,
         add: [
           CreateScheduleUseCase,
@@ -137,12 +137,12 @@ export const providers = {
         ],
       },
       {
-        key: SpreadsheetFacade,
+        for: SpreadsheetFacade,
         use: SpreadsheetFacade,
         add: [
+          ParseSpreadsheetUseCase,
           BuildSpreadsheetUseCase,
           DownloadSpreadsheetUseCase,
-          ParseSpreadsheetUseCase,
         ],
       }
     );

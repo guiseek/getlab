@@ -6,7 +6,7 @@ export type ProviderKey<T> = AbstractType<T> | Token<T>;
 export type ProviderImpl<T> = T | Type<T> | Token<T>;
 
 export interface Provider<T = unknown> {
-  key: ProviderKey<T>;
+  for: ProviderKey<T>;
   use: ProviderImpl<T>;
   add?: ProviderKey<T>[];
 }

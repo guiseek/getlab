@@ -21,6 +21,10 @@ export const featureRoutes: Route[] = [
         path: 'planilha',
         component: SpreadsheetContainer,
       },
+      {
+        path: '**',
+        redirectTo: 'planilha'
+      }
     ],
   },
 ];

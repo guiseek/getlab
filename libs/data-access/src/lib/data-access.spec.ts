@@ -36,20 +36,20 @@ const SCHEDULES: Schedule[] = [
 
 di.register(
   {
-    key: TEAM_MOCK_TOKEN,
+    for: TEAM_MOCK_TOKEN,
     use: TEAMS,
   },
   {
-    key: SCHEDULE_MOCK_TOKEN,
+    for: SCHEDULE_MOCK_TOKEN,
     use: SCHEDULES,
   },
   {
-    key: TeamRepository,
+    for: TeamRepository,
     use: TeamMockRepositoryImpl,
     add: [TEAM_MOCK_TOKEN],
   },
   {
-    key: ScheduleRepository,
+    for: ScheduleRepository,
     use: ScheduleMockRepositoryImpl,
     add: [TEAM_MOCK_TOKEN],
   }
@@ -57,6 +57,7 @@ di.register(
 
 providers.useCases();
 providers.application();
+
 
 describe('Data Access', () => {
   describe('Application', () => {
