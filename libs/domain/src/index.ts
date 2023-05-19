@@ -6,4 +6,3 @@ export * from './lib/repository/schedule';
 export * from './lib/base/repository';
 export * from './lib/entities';
 export * from './lib/dtos';
-

@@ -3,17 +3,16 @@ import { AppComponent } from './app.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { providers } from '@getlab/data-access';
 
-providers.infrastructure()
-providers.useCases()
-providers.application()
-
+providers.infrastructure();
+providers.useCases();
+providers.application();
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       declarations: [AppComponent],
-      providers: [providers.transfer()]
+      providers: [providers.transfer()],
     }).compileComponents();
   });
 
