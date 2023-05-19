@@ -47,7 +47,7 @@ export class TeamStorageRepositoryImpl
   findAll() {
     let data = this.read();
 
-    const isOutdated = 'team' in data[0];
+    const isOutdated = 'team' in (data[0] ?? {});
 
     data = data.map(refactorTeam);
 
