@@ -11,12 +11,13 @@ import { appRoutes } from './app.routes';
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(appRoutes, { initialNavigation: 'enabledBlocking', useHash: true }),
+    RouterModule.forRoot(appRoutes, {
+      initialNavigation: 'enabledBlocking',
+      useHash: true,
+    }),
     BrowserAnimationsModule,
   ],
-  providers: [
-    appProviders()
-  ],
+  providers: [appProviders()],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

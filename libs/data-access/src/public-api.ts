@@ -11,7 +11,7 @@ import type {
   UpdateTeamDto,
   CreateScheduleDto,
   UpdateScheduleDto,
-  BuildSpreadsheetDto
+  BuildSpreadsheetDto,
 } from '@getlab/domain';
 export type {
   BuildSpreadsheetDto,

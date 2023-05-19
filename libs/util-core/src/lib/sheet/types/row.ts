@@ -1,11 +1,11 @@
 export interface Row {
-  id: string
-  name: string
-  ref: string
-  people: number
-  goal: string
-  date: Date
-  byweekday: number
-  interval: 1 | 2
-  time: string
+  id: string;
+  name: string;
+  ref: string;
+  people: number;
+  goal: string;
+  date: Date;
+  byweekday: number;
+  interval: 1 | 2;
+  time: string;
 }
