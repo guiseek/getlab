@@ -6,9 +6,9 @@ import {
   getTimeEndByStart,
 } from '@getlab/util-core';
 import {
+  Schedule,
   CreateScheduleDto,
   UpdateScheduleDto,
-  Schedule,
 } from '@getlab/data-access';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
@@ -43,6 +43,10 @@ export class ScheduleForm extends FormGroup<TypedForm<Schedule>> {
 
   get hasId() {
     return this.get('id')?.value;
+  }
+
+  init() {
+    this.patchValue({ interval: 1 });
   }
 
   getValue<T extends CreateScheduleDto | UpdateScheduleDto>() {

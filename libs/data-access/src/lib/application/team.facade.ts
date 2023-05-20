@@ -47,17 +47,11 @@ export class TeamFacade extends Store<TeamState> {
   }
 
   createTeam(team: CreateTeamDto) {
-    this.createUseCase.execute(team).then((team) => {
-      this.setState({ team });
-      this.load();
-    });
+    this.createUseCase.execute(team).then(() => this.load());
   }
 
   updateTeam(team: UpdateTeamDto) {
-    this.updateUseCase.execute(team).then((team) => {
-      this.setState({ team });
-      this.load();
-    });
+    this.updateUseCase.execute(team).then(() => this.load());
   }
 
   removeTeam(id: string) {

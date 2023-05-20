@@ -1,14 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { MATERIAL_MODULES } from './material-modules';
-import { featureRoutes } from './feature.routes';
-import { FeatureComponent } from './feature.component';
-import { TeamContainer } from './containers/team/team.container';
-import { ScheduleContainer } from './containers/schedule/schedule.container';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MATERIAL_MODULES } from './material-modules';
+import { FeatureComponent } from './feature.component';
 import { WeekdayPipe } from './pipes/weekday.pipe';
-import { SpreadsheetContainer } from './containers/spreadsheet/spreadsheet.container';
+import { featureRoutes } from './feature.routes';
+import { CONFIRM_DIALOG, ConfirmDialogComponent } from './components';
+import { MatDialog } from '@angular/material/dialog';
+import { register } from '@getlab/util-core';
+import {
+  TeamContainer,
+  ScheduleContainer,
+  SpreadsheetContainer,
+} from './containers';
 
 @NgModule({
   imports: [
@@ -18,11 +23,16 @@ import { SpreadsheetContainer } from './containers/spreadsheet/spreadsheet.conta
     RouterModule.forChild(featureRoutes),
   ],
   declarations: [
-    FeatureComponent,
-    TeamContainer,
-    ScheduleContainer,
     WeekdayPipe,
+    TeamContainer,
+    FeatureComponent,
+    ScheduleContainer,
     SpreadsheetContainer,
+    ConfirmDialogComponent,
   ],
 })
-export class FeatureModule {}
+export class FeatureModule {
+  constructor(readonly matDialog: MatDialog) {
+    register({ for: CONFIRM_DIALOG, use: matDialog });
+  }
+}
