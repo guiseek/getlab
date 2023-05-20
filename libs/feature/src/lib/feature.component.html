@@ -8,23 +8,45 @@
     [opened]="(isHandset$ | async) === false"
   >
     <mat-toolbar>
-      <h1>GetLab</h1>
+      <div class="flex align-center">
+        <svg matListItemAvatar width="48px" height="48px">
+          <use href="/assets/getlab.svg#logo" class="navy" />
+        </svg>
+        <h1>
+          GetLab
+        </h1>
+      </div>
     </mat-toolbar>
     <mat-divider></mat-divider>
-    <mat-nav-list>
-      <a mat-list-item routerLink="/turmas" routerLinkActive="active">
-        <mat-icon matListItemIcon>groups</mat-icon>
-        <span>Turmas</span>
-      </a>
-      <a mat-list-item routerLink="/reservas" routerLinkActive="active">
-        <mat-icon matListItemIcon>schedule</mat-icon>
-        <span> Horários </span>
-      </a>
-      <a mat-list-item routerLink="/planilha" routerLinkActive="active">
-        <mat-icon matListItemIcon>checklist_rtl</mat-icon>
-        <span>Planilha</span>
-      </a>
-    </mat-nav-list>
+    <nav class="flex col space-between">
+      <mat-nav-list>
+        <a mat-list-item routerLink="/turmas" routerLinkActive="active">
+          <mat-icon matListItemIcon>groups</mat-icon>
+          <span>Turmas</span>
+        </a>
+        <a mat-list-item routerLink="/reservas" routerLinkActive="active">
+          <mat-icon matListItemIcon>schedule</mat-icon>
+          <span> Horários </span>
+        </a>
+        <a mat-list-item routerLink="/planilha" routerLinkActive="active">
+          <mat-icon matListItemIcon>checklist_rtl</mat-icon>
+          <span>Planilha</span>
+        </a>
+      </mat-nav-list>
+
+      <mat-nav-list>
+        <a
+          mat-list-item
+          href="https://github.com/guiseek/getlab"
+          target="_blank"
+        >
+          <svg matListItemAvatar width="48px" height="48px">
+            <use href="/assets/icons.svg#github" />
+          </svg>
+          <span>Github</span>
+        </a>
+      </mat-nav-list>
+    </nav>
   </mat-sidenav>
 
   <mat-sidenav-content class="sidenav-content">

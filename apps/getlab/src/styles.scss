@@ -121,6 +121,17 @@ strong {
   }
 }
 
+.mat-mdc-card .mat-mdc-form-field-bottom-align {
+  height: 16px;
+  &::before {
+    height: 0;
+  }
+}
+span,
+strong {
+  display: inline-flex;
+  padding: 0 2px;
+}
 a.mat-mdc-icon-button {
   display: inline-flex;
 }
@@ -129,18 +140,12 @@ a.mat-mdc-icon-button {
   opacity: 0.5;
 }
 
-span,
-strong {
-  display: inline-flex;
-  padding: 2px;
-}
 
 .row {
   display: flex;
   flex-flow: row wrap;
   margin-bottom: 8px;
-  column-gap: 16px;
-  row-gap: 16px;
+  gap: 16px;
 }
 
 .col {
@@ -226,6 +231,9 @@ strong {
 
     &.align-center {
       justify-content: center;
+    }
+    &.space-between {
+      align-content: space-between;
     }
 
     &.gap-8 {
