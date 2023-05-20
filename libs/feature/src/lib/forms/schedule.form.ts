@@ -2,7 +2,6 @@ import {
   TIMES,
   TimeEnd,
   TimeStart,
-  TypedForm,
   getTimeEndByStart,
 } from '@getlab/util-core';
 import {
@@ -10,10 +9,15 @@ import {
   CreateScheduleDto,
   UpdateScheduleDto,
 } from '@getlab/data-access';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
+import { EntityForm } from '../containers/base';
 import { BehaviorSubject } from 'rxjs';
 
-export class ScheduleForm extends FormGroup<TypedForm<Schedule>> {
+export class ScheduleForm extends EntityForm<
+  Schedule,
+  CreateScheduleDto,
+  UpdateScheduleDto
+> {
   #timeStart = new BehaviorSubject<TimeStart[]>([]);
   timeStart$ = this.#timeStart.asObservable();
 
@@ -41,16 +45,8 @@ export class ScheduleForm extends FormGroup<TypedForm<Schedule>> {
     });
   }
 
-  get hasId() {
-    return this.get('id')?.value;
-  }
-
   init() {
     this.patchValue({ interval: 1 });
-  }
-
-  getValue<T extends CreateScheduleDto | UpdateScheduleDto>() {
-    return this.value as T;
   }
 
   onInit() {

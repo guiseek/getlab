@@ -2,172 +2,144 @@
   <h2>Horários</h2>
 </mat-toolbar>
 
-<section class="row">
-  <div class="flex col gap-16 min-500">
-    <mat-card *ngIf="teamFacade.hasNoTeams$ | async">
+<section #sectionRef class="row">
+  <mat-card class="col min-300 overflow-hidden">
+    <table mat-table [dataSource]="scheduleFacade.data$">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>Id</th>
+        <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="team">
+        <th mat-header-cell *matHeaderCellDef>Turma</th>
+        <td mat-cell *matCellDef="let row">{{ row.team.ref }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="byweekday">
+        <th mat-header-cell *matHeaderCellDef>Dia</th>
+        <td mat-cell *matCellDef="let row">{{ row.byweekday | weekday }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="time">
+        <th mat-header-cell *matHeaderCellDef>Horário</th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.timeStart }} ~ {{ row.timeEnd }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="update">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          <a mat-icon-button [routerLink]="['/reservas', element.id]">
+            <mat-icon>edit</mat-icon>
+          </a>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="remove">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button (click)="onRemove(element)">
+            <mat-icon>delete_outline</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columns$ | async"></tr>
+      <tr mat-row *matRowDef="let row; columns: columns$ | async"></tr>
+    </table>
+  </mat-card>
+
+  <form
+    #formRef
+    id="form"
+    novalidate
+    [formGroup]="form"
+    class="col min-300"
+    (submit)="onSubmit('reservas')"
+  >
+    <mat-card>
       <mat-card-header>
-        <svg mat-card-avatar>
-          <use href="/assets/icons.svg#info" class="navy" />
-        </svg>
-        <mat-card-title> Informação </mat-card-title>
-        <mat-card-subtitle> Sobre solicitação de reserva </mat-card-subtitle>
+        <mat-card-title>
+          {{form.hasId ? 'Editar' : 'Cadastrar'}} horário de aula
+        </mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        Crie uma turma antes de
-        <p>
-          O formulário ao lado está desabilitado porque não temos nenhuma turma
-          armazenada.
-        </p>
-        <p>
-          A configuração de horários para planilha de solicitação de reserva
-          exige que uma turma seja vinculada.
-        </p>
+        <div class="flex col gap-8">
+          <div class="row" *ngIf="teamFacade.data$ | async as data">
+            <section class="col min-200">
+              <mat-form-field *ngIf="data.length > 0">
+                <mat-label>Turma</mat-label>
+                <mat-select formControlName="team" [compareWith]="compareFn">
+                  <mat-option *ngFor="let team of data" [value]="team">
+                    {{ team.ref }}
+                  </mat-option>
+                </mat-select>
+                <mat-error>Selecione a turma</mat-error>
+              </mat-form-field>
+            </section>
+            <section class="col min-200">
+              <mat-form-field>
+                <mat-label>Frequência</mat-label>
+                <mat-select formControlName="interval">
+                  <mat-option [value]="1"> Todas as semanas </mat-option>
+                  <mat-option [value]="2"> A cada 2 semanas </mat-option>
+                </mat-select>
+                <mat-icon matPrefix class="mat-muted">date_range</mat-icon>
+                <mat-error>Selecione o dia da semana</mat-error>
+              </mat-form-field>
+            </section>
+          </div>
+          <div class="row">
+            <section class="col min-200">
+              <mat-form-field>
+                <mat-label>Dia da semana</mat-label>
+                <mat-select formControlName="byweekday">
+                  <mat-option *ngFor="let day of form.daysOfWeek" [value]="day">
+                    {{ day | weekday }}
+                  </mat-option>
+                </mat-select>
+                <mat-icon matPrefix class="mat-muted">event</mat-icon>
+                <mat-error>Selecione o dia da semana</mat-error>
+              </mat-form-field>
+            </section>
+            <section class="col min-100">
+              <mat-form-field>
+                <mat-label>Inicia</mat-label>
+                <mat-select formControlName="timeStart" required>
+                  <mat-option
+                    *ngFor="let time of form.timeStart$ | async"
+                    [value]="time"
+                  >
+                    {{ time }}
+                  </mat-option>
+                </mat-select>
+                <mat-icon matPrefix class="mat-muted">schedule</mat-icon>
+                <mat-error>Horário inicial obrigatório</mat-error>
+              </mat-form-field>
+            </section>
+
+            <section class="col min-100">
+              <mat-form-field>
+                <mat-label>Término</mat-label>
+                <mat-select formControlName="timeEnd" required>
+                  <mat-option
+                    *ngFor="let time of form.timeEnd$ | async"
+                    [value]="time"
+                  >
+                    {{ time }}
+                  </mat-option>
+                </mat-select>
+                <mat-icon matPrefix class="mat-muted">schedule</mat-icon>
+                <mat-error>Horário final obrigatório</mat-error>
+              </mat-form-field>
+            </section>
+          </div>
+        </div>
       </mat-card-content>
-      <mat-card-actions>
-        <a mat-button routerLink="/turmas">
-          <mat-icon>arrow_back</mat-icon>
-          Navegar para a página de turmas
-        </a>
+      <mat-card-actions class="flex row-reverse space-between">
+        <button mat-raised-button color="primary" type="submit">Salvar</button>
+        <button mat-raised-button #resetRef type="reset">Limpar</button>
       </mat-card-actions>
     </mat-card>
-
-    <mat-card class="col min-500 overflow-hidden">
-      <table mat-table [dataSource]="scheduleFacade.data$">
-        <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef>Id</th>
-          <td mat-cell *matCellDef="let row">{{ row.id }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="team">
-          <th mat-header-cell *matHeaderCellDef>Turma</th>
-          <td mat-cell *matCellDef="let row">{{ row.team.ref }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="byweekday">
-          <th mat-header-cell *matHeaderCellDef>Dia</th>
-          <td mat-cell *matCellDef="let row">{{ row.byweekday | weekday }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="time">
-          <th mat-header-cell *matHeaderCellDef>Horário</th>
-          <td mat-cell *matCellDef="let row">
-            {{ row.timeStart }} ~ {{ row.timeEnd }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="update">
-          <th mat-header-cell *matHeaderCellDef></th>
-          <td mat-cell *matCellDef="let element">
-            <a mat-icon-button [routerLink]="['/reservas', element.id]">
-              <mat-icon>edit</mat-icon>
-            </a>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="remove">
-          <th mat-header-cell *matHeaderCellDef></th>
-          <td mat-cell *matCellDef="let element">
-            <button mat-icon-button (click)="onRemove(element)">
-              <mat-icon>delete_outline</mat-icon>
-            </button>
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="columns$ | async"></tr>
-        <tr mat-row *matRowDef="let row; columns: columns$ | async"></tr>
-      </table>
-    </mat-card>
-  </div>
-  <div class="col min-300">
-    <form id="form" [formGroup]="scheduleForm" novalidate (submit)="onSubmit()">
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>
-            {{scheduleForm.hasId ? 'Editar' : 'Cadastrar'}} horário de aula
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="flex col gap-8">
-            <div class="row" *ngIf="teamFacade.data$ | async as data">
-              <section class="col min-200">
-                <mat-form-field *ngIf="data.length > 0">
-                  <mat-label>Turma</mat-label>
-                  <mat-select formControlName="team" [compareWith]="compareFn">
-                    <mat-option *ngFor="let team of data" [value]="team">
-                      {{ team.ref }}
-                    </mat-option>
-                  </mat-select>
-                  <mat-error>Selecione a turma</mat-error>
-                </mat-form-field>
-              </section>
-              <section class="col min-200">
-                <mat-form-field>
-                  <mat-label>Frequência</mat-label>
-                  <mat-select formControlName="interval">
-                    <mat-option [value]="1"> Todas as semanas </mat-option>
-                    <mat-option [value]="2"> A cada 2 semanas </mat-option>
-                  </mat-select>
-                  <mat-icon matPrefix class="mat-muted">date_range</mat-icon>
-                  <mat-error>Selecione o dia da semana</mat-error>
-                </mat-form-field>
-              </section>
-            </div>
-            <div class="row">
-              <section class="col min-200">
-                <mat-form-field>
-                  <mat-label>Dia da semana</mat-label>
-                  <mat-select formControlName="byweekday">
-                    <mat-option
-                      *ngFor="let day of scheduleForm.daysOfWeek"
-                      [value]="day"
-                    >
-                      {{ day | weekday }}
-                    </mat-option>
-                  </mat-select>
-                  <mat-icon matPrefix class="mat-muted">event</mat-icon>
-                  <mat-error>Selecione o dia da semana</mat-error>
-                </mat-form-field>
-              </section>
-              <section class="col min-100">
-                <mat-form-field>
-                  <mat-label>Inicia</mat-label>
-                  <mat-select formControlName="timeStart" required>
-                    <mat-option
-                      *ngFor="let time of scheduleForm.timeStart$ | async"
-                      [value]="time"
-                    >
-                      {{ time }}
-                    </mat-option>
-                  </mat-select>
-                  <mat-icon matPrefix class="mat-muted">schedule</mat-icon>
-                  <mat-error>Horário inicial obrigatório</mat-error>
-                </mat-form-field>
-              </section>
-
-              <section class="col min-100">
-                <mat-form-field>
-                  <mat-label>Término</mat-label>
-                  <mat-select formControlName="timeEnd" required>
-                    <mat-option
-                      *ngFor="let time of scheduleForm.timeEnd$ | async"
-                      [value]="time"
-                    >
-                      {{ time }}
-                    </mat-option>
-                  </mat-select>
-                  <mat-icon matPrefix class="mat-muted">schedule</mat-icon>
-                  <mat-error>Horário final obrigatório</mat-error>
-                </mat-form-field>
-              </section>
-            </div>
-          </div>
-        </mat-card-content>
-        <mat-card-actions class="flex row-reverse space-between">
-          <button mat-raised-button color="primary" type="submit">
-            Salvar
-          </button>
-          <button mat-raised-button #resetRef type="reset">Limpar</button>
-        </mat-card-actions>
-      </mat-card>
-    </form>
-  </div>
+  </form>
 </section>

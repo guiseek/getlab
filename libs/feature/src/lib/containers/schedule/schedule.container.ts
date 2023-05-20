@@ -1,34 +1,28 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import {
-  Team,
   Schedule,
   TeamFacade,
   ScheduleFacade,
   CreateScheduleDto,
   UpdateScheduleDto,
 } from '@getlab/data-access';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Subject, map, shareReplay, takeUntil } from 'rxjs';
-import { MatButton } from '@angular/material/button';
-import { ActivatedRoute } from '@angular/router';
-import { ScheduleForm } from '../../forms';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { ActivatedRoute, Router } from '@angular/router';
+import { map, shareReplay, takeUntil } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 import { ConfirmDialog } from '../../components';
+import { ScheduleForm } from '../../forms';
+import { EntityContainer } from '../base';
 
 @Component({
   selector: 'getlab-schedule',
   templateUrl: './schedule.container.html',
   styleUrls: ['./schedule.container.scss'],
 })
-export class ScheduleContainer implements OnInit, OnDestroy {
-  #subject = new Subject<void>();
-
-  @ViewChild('resetRef', { static: true })
-  resetButton!: MatButton;
-  get resetRef() {
-    return this.resetButton._elementRef;
-  }
-
-  scheduleForm = new ScheduleForm();
+export class ScheduleContainer
+  extends EntityContainer<Schedule, CreateScheduleDto, UpdateScheduleDto>
+  implements OnInit
+{
+  form = new ScheduleForm();
 
   columns$ = this.bpObserver.observe(Breakpoints.Handset).pipe(
     map((result) => result.matches),
@@ -44,31 +38,29 @@ export class ScheduleContainer implements OnInit, OnDestroy {
     private bpObserver: BreakpointObserver,
     readonly scheduleFacade: ScheduleFacade,
     readonly teamFacade: TeamFacade,
+    override readonly router: Router,
     readonly route: ActivatedRoute
-  ) {}
+  ) {
+    super(router);
+  }
 
   ngOnInit() {
-    this.scheduleForm.onInit();
+    this.form.onInit();
     this.scheduleFacade.load();
     this.teamFacade.load();
 
-    this.teamFacade.hasNoTeams$
-      .pipe(takeUntil(this.#subject))
-      .subscribe((hasNoTeams) => {
-        if (hasNoTeams) {
-          this.scheduleForm.disable();
-        } else {
-          this.scheduleForm.enable();
+    this.scheduleFacade.schedule$
+      .pipe(takeUntil(this.subject))
+      .subscribe((schedule) => {
+        if (schedule) {
+          this.form.patchValue(schedule);
+          this.formEl.scrollIntoView({
+            behavior: 'smooth',
+          });
         }
       });
 
-    this.scheduleFacade.schedule$
-      .pipe(takeUntil(this.#subject))
-      .subscribe((schedule) => {
-        if (schedule) this.scheduleForm.patchValue(schedule);
-      });
-
-    this.route.params.pipe(takeUntil(this.#subject)).subscribe(({ id }) => {
+    this.route.params.pipe(takeUntil(this.subject)).subscribe(({ id }) => {
       if (id) this.scheduleFacade.findSchedule(id);
     });
   }
@@ -82,34 +74,11 @@ export class ScheduleContainer implements OnInit, OnDestroy {
     if (id) this.scheduleFacade.removeSchedule(id);
   }
 
-  onSubmit() {
-    if (this.scheduleForm.valid) {
-      if (this.scheduleForm.hasId) {
-        this.#update(this.scheduleForm.getValue());
-      } else {
-        this.#create(this.scheduleForm.getValue());
-      }
-      this.resetRef.nativeElement.click();
-      this.scheduleForm.init();
-    } else {
-      this.scheduleForm.markAllAsTouched();
-    }
-  }
-
-  compareFn(team1: Team, team2: Team) {
-    return team1 && team2 && team1.id === team2.id;
-  }
-
-  #create(value: CreateScheduleDto) {
+  create(value: CreateScheduleDto) {
     this.scheduleFacade.createSchedule(value);
   }
 
-  #update(value: UpdateScheduleDto) {
+  update(value: UpdateScheduleDto) {
     this.scheduleFacade.updateSchedule(value);
-  }
-
-  ngOnDestroy() {
-    this.#subject.next();
-    this.#subject.complete();
   }
 }

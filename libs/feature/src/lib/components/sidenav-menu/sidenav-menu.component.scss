@@ -1,0 +1,13 @@
+:host {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+
+  h1 {
+    font-family: 'Varela Round', sans-serif;
+  }
+}
+::ng-deep .mat-drawer-inner-container {
+  display: flex;
+  flex-direction: column;
+}
