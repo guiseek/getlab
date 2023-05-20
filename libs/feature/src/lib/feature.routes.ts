@@ -10,19 +10,19 @@ export const featureRoutes: Route[] = [
     component: FeatureComponent,
     children: [
       {
-        path: 'turmas',
-        component: TeamContainer,
-      },
-      {
         path: 'turmas/:id',
         component: TeamContainer,
       },
       {
-        path: 'reservas',
-        component: ScheduleContainer,
+        path: 'turmas',
+        component: TeamContainer,
       },
       {
         path: 'reservas/:id',
+        component: ScheduleContainer,
+      },
+      {
+        path: 'reservas',
         component: ScheduleContainer,
       },
       {

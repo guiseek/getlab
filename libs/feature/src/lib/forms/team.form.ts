@@ -1,8 +1,8 @@
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CreateTeamDto, Team, UpdateTeamDto } from '@getlab/data-access';
-import { TypedForm } from '@getlab/util-core';
+import { FormControl, Validators } from '@angular/forms';
+import { EntityForm } from '../containers/base';
 
-export class TeamForm extends FormGroup<TypedForm<CreateTeamDto | Team>> {
+export class TeamForm extends EntityForm<Team, CreateTeamDto, UpdateTeamDto> {
   constructor() {
     super({
       id: new FormControl<string | null>(null),
@@ -16,15 +16,7 @@ export class TeamForm extends FormGroup<TypedForm<CreateTeamDto | Team>> {
     });
   }
 
-  get hasId() {
-    return this.get('id')?.value;
-  }
-
   init() {
     this.patchValue({ people: 0, goal: 'Desenvolvimento de Software' });
-  }
-
-  getValue<T extends CreateTeamDto | UpdateTeamDto>() {
-    return this.value as T;
   }
 }
