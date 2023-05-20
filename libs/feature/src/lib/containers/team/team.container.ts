@@ -4,14 +4,12 @@ import {
   UpdateTeamDto,
   CreateTeamDto,
 } from '@getlab/data-access';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { CONFIRM_DIALOG, ConfirmDialog } from '../../components';
-import { Subject, map, shareReplay, takeUntil } from 'rxjs';
-import { MatButton } from '@angular/material/button';
-import { ActivatedRoute } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-import { register } from '@getlab/util-core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { map, shareReplay, takeUntil } from 'rxjs';
+import { ConfirmDialog } from '../../components';
+import { EntityContainer } from '../base';
 import { TeamForm } from '../../forms';
 
 @Component({
@@ -19,16 +17,8 @@ import { TeamForm } from '../../forms';
   templateUrl: './team.container.html',
   styleUrls: ['./team.container.scss'],
 })
-export class TeamContainer implements OnInit, OnDestroy {
-  #subject = new Subject<void>();
-
-  @ViewChild('resetRef', { static: true })
-  resetButton!: MatButton;
-  get resetRef() {
-    return this.resetButton._elementRef;
-  }
-
-  teamForm = new TeamForm();
+export class TeamContainer extends EntityContainer<Team> implements OnInit {
+  form = new TeamForm();
 
   columns$ = this.bpObserver.observe(Breakpoints.Handset).pipe(
     map((result) => result.matches),
@@ -43,17 +33,20 @@ export class TeamContainer implements OnInit, OnDestroy {
   constructor(
     private bpObserver: BreakpointObserver,
     readonly teamFacade: TeamFacade,
+    override readonly router: Router,
     readonly route: ActivatedRoute
-  ) {}
+  ) {
+    super(router);
+  }
 
   ngOnInit() {
     this.teamFacade.load();
 
-    this.teamFacade.team$.pipe(takeUntil(this.#subject)).subscribe((team) => {
-      if (team) this.teamForm.patchValue(team);
+    this.teamFacade.team$.pipe(takeUntil(this.subject)).subscribe((team) => {
+      if (team) this.form.patchValue(team);
     });
 
-    this.route.params.pipe(takeUntil(this.#subject)).subscribe(({ id }) => {
+    this.route.params.pipe(takeUntil(this.subject)).subscribe(({ id }) => {
       if (id) this.teamFacade.findTeam(id);
     });
   }
@@ -67,30 +60,11 @@ export class TeamContainer implements OnInit, OnDestroy {
     if (id) this.teamFacade.removeTeam(id);
   }
 
-  onSubmit() {
-    if (this.teamForm.valid) {
-      if (this.teamForm.hasId) {
-        this.#update(this.teamForm.getValue());
-      } else {
-        this.#create(this.teamForm.getValue());
-      }
-      this.resetRef.nativeElement.click();
-      this.teamForm.init();
-    } else {
-      this.teamForm.markAllAsTouched();
-    }
-  }
-
-  #create(value: CreateTeamDto) {
+  create(value: CreateTeamDto) {
     this.teamFacade.createTeam(value);
   }
 
-  #update(value: UpdateTeamDto) {
+  update(value: UpdateTeamDto) {
     this.teamFacade.updateTeam(value);
-  }
-
-  ngOnDestroy() {
-    this.#subject.next();
-    this.#subject.complete();
   }
 }
