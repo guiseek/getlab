@@ -5,7 +5,7 @@
 <section class="flex col gap-16">
   <mat-card>
     <form class="row" [formGroup]="spreadsheetForm">
-      <section class="col minw-300">
+      <section class="col min-300">
         <mat-form-field appearance="outline">
           <mat-label>Período</mat-label>
           <mat-date-range-input
@@ -39,16 +39,18 @@
           </mat-error>
         </mat-form-field>
       </section>
-      <section class="col minw-300">
+      <section class="col min-300">
         <mat-form-field appearance="outline">
-          <mat-label>Reservas</mat-label>
-          <mat-select #scheduleRef formControlName="schedules" multiple>
+          <mat-label>Horários</mat-label>
+          <mat-select
+            #scheduleRef
+            formControlName="schedules"
+            [compareWith]="compareFn"
+            multiple
+          >
             <mat-select-trigger>
               {{schedules?.[0]?.byweekday! | weekday }}
-              <span
-                *ngIf="(schedules?.length || 0) > 1"
-                class="example-additional-selection"
-              >
+              <span *ngIf="(schedules?.length || 0) > 1">
                 (+{{ (schedules?.length || 0) - 1 }} {{ schedules?.length === 2
                 ? 'outro dia' : 'outros dias' }})
               </span>
@@ -127,7 +129,7 @@
     *ngIf="spreadsheetFacade.parsed$ | async as parsed"
     class="flex right gap-16 fixed bottom"
   >
-    <div class="col minw-100">
+    <div class="col min-100">
       <button
         mat-raised-button
         [disabled]="!parsed.length"
@@ -137,7 +139,7 @@
         Copiar
       </button>
     </div>
-    <div class="col minw-100">
+    <div class="col min-100">
       <button
         color="primary"
         mat-raised-button

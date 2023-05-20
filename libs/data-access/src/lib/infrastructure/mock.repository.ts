@@ -36,6 +36,14 @@ export class MockRepository<T, K extends keyof T>
     return Promise.resolve(entity);
   }
 
+  filterBy<P extends keyof T>(prop: P, ...values: T[P][]): Promise<T[]> {
+    const schedules = this.collection.filter((schedule) =>
+      values.includes(schedule[prop])
+    );
+
+    return Promise.resolve(schedules);
+  }
+
   updateOne(id: T[K], value: T, prop?: K) {
     const index = this.#findIndex(id, prop!);
     const entity = { ...this.collection[index], ...value };

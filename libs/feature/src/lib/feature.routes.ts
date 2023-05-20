@@ -14,7 +14,15 @@ export const featureRoutes: Route[] = [
         component: TeamContainer,
       },
       {
+        path: 'turmas/:id',
+        component: TeamContainer,
+      },
+      {
         path: 'reservas',
+        component: ScheduleContainer,
+      },
+      {
+        path: 'reservas/:id',
         component: ScheduleContainer,
       },
       {
@@ -23,8 +31,8 @@ export const featureRoutes: Route[] = [
       },
       {
         path: '**',
-        redirectTo: 'planilha'
-      }
+        redirectTo: 'planilha',
+      },
     ],
   },
 ];

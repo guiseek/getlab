@@ -1,49 +1,50 @@
-import { Provider, ProviderKey, Type, Token } from './types';
+import type { Type, UseAs, Provider, ProviderKey, ProviderItem } from './types';
 
-const di = () => {
-  const container = new Map();
-  const relations = new Map();
+const container = new Map();
+const relations = new Map();
+const providers: ProviderItem[] = [];
 
-  const get = <T>(type: ProviderKey<T>): T => {
-    const concrete = container.get(type);
-    if (!concrete) throw `${type.name} não registrado`;
-    return concrete;
-  };
-
-  const set = <T>({ for: key, use, add = [] }: Provider<T>) => {
-    relations.set(key, add.map(get));
-
-    if (key instanceof Token) {
-      container.set(key, use);
-      return;
-    }
-
-    if (typeof use === 'function') {
-      const clazz = use as Type<typeof use>;
-      const dependencies = relations.get(key);
-      const instance = new clazz(...dependencies);
-
-      if (instance instanceof use) {
-        container.set(key, instance);
-      }
-    }
-  };
-
-  const providerList: Provider[] = [];
-
-  const register = (...providers: Provider[]) => {
-    providerList.push(...providers);
-    providers.forEach(set);
-  };
-
-  const transfer = () => {
-    return providerList.map(({ for: provide, use, add: deps = [] }) => {
-      const useKey = provide instanceof Token ? 'useValue' : 'useClass';
-      return { provide, deps, [useKey]: use };
-    });
-  };
-
-  return { get, set, register, transfer };
+export const inject = <T>(type: ProviderKey<T>): T => {
+  const concrete = container.get(type);
+  if (!concrete) throw `Provider ${type.name} não registrado`;
+  return concrete;
 };
 
-export default di();
+const instantiate = <T>({ for: key, use }: Provider<T>) => {
+  let useAs: UseAs;
+
+  if (typeof use === 'function') {
+    const dependencies = relations.get(key);
+    try {
+      useAs = 'useClass';
+      const clazz = use as Type<typeof use>;
+      const instance = new clazz(...dependencies) as T;
+      return { instance, useAs };
+    } catch {
+      useAs = 'useFactory';
+      const factory = use as (...params: unknown[]) => any;
+      const instance = factory(...dependencies);
+      return { instance, useAs };
+    }
+  }
+
+  useAs = 'useValue';
+  return { instance: use as T, useAs };
+};
+
+const set = <T>(provider: Provider<T>) => {
+  relations.set(provider.for, (provider.add ?? []).map(inject));
+  const { instance, useAs } = instantiate(provider);
+  container.set(provider.for, instance);
+  providers.push({ ...provider, useAs });
+};
+
+export const register = (...providers: Provider[]) => providers.forEach(set);
+
+export const transfer = () => {
+  return providers.map(({ for: provide, use, add: deps = [], useAs }) => {
+    return { provide, deps, [useAs]: use };
+  });
+};
+
+export default { inject, register, transfer };

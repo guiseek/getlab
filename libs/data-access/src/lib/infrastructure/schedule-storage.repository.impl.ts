@@ -43,6 +43,16 @@ export class ScheduleStorageRepositoryImpl
     return Promise.resolve(schedule);
   }
 
+  filterBy<P extends keyof Schedule>(
+    prop: P,
+    ...values: Schedule[P][]
+  ): Promise<Schedule[]> {
+    const schedules = this.read().filter((schedule) =>
+      values.includes(schedule[prop])
+    );
+    return Promise.resolve(schedules);
+  }
+
   findAll() {
     let data = this.read();
 
