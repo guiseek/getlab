@@ -81,6 +81,10 @@ figure {
   fill: map.get(app.$navy, 500);
 }
 
+strong {
+  color: map.get(app.$navy, 900);
+}
+
 .overflow-hidden {
   overflow: hidden;
 }

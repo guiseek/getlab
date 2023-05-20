@@ -20,6 +20,10 @@ export class TeamForm extends FormGroup<TypedForm<CreateTeamDto | Team>> {
     return this.get('id')?.value;
   }
 
+  init() {
+    this.patchValue({ people: 0, goal: 'Desenvolvimento de Software' });
+  }
+
   getValue<T extends CreateTeamDto | UpdateTeamDto>() {
     return this.value as T;
   }

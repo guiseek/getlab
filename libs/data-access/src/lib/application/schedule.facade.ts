@@ -57,17 +57,11 @@ export class ScheduleFacade extends Store<ScheduleState> {
   }
 
   createSchedule(schedule: CreateScheduleDto) {
-    this.createUseCase.execute(schedule).then((schedule) => {
-      this.setState({ schedule });
-      this.load();
-    });
+    this.createUseCase.execute(schedule).then(() => this.load());
   }
 
   updateSchedule(schedule: UpdateScheduleDto) {
-    this.updateUseCase.execute(schedule).then((schedule) => {
-      this.setState({ schedule });
-      this.load();
-    });
+    this.updateUseCase.execute(schedule).then(() => this.load());
   }
 
   removeSchedule(id: string) {

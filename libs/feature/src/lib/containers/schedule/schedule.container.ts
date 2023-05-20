@@ -1,6 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import {
   Team,
+  Schedule,
   TeamFacade,
   ScheduleFacade,
   CreateScheduleDto,
@@ -11,6 +12,7 @@ import { Subject, map, shareReplay, takeUntil } from 'rxjs';
 import { MatButton } from '@angular/material/button';
 import { ActivatedRoute } from '@angular/router';
 import { ScheduleForm } from '../../forms';
+import { ConfirmDialog } from '../../components';
 
 @Component({
   selector: 'getlab-schedule',
@@ -71,6 +73,15 @@ export class ScheduleContainer implements OnInit, OnDestroy {
     });
   }
 
+  @ConfirmDialog<Schedule>({
+    title: 'Remover horário',
+    message: 'Tem certeza de que deseja continuar esta ação?',
+    prop: 'timeStart',
+  })
+  onRemove({ id }: Schedule) {
+    if (id) this.scheduleFacade.removeSchedule(id);
+  }
+
   onSubmit() {
     if (this.scheduleForm.valid) {
       if (this.scheduleForm.hasId) {
@@ -79,6 +90,7 @@ export class ScheduleContainer implements OnInit, OnDestroy {
         this.#create(this.scheduleForm.getValue());
       }
       this.resetRef.nativeElement.click();
+      this.scheduleForm.init();
     } else {
       this.scheduleForm.markAllAsTouched();
     }
