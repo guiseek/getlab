@@ -28,7 +28,7 @@ export class TeamFacade extends Store<TeamState> {
     private readonly createUseCase: CreateTeamUseCase,
     private readonly updateUseCase: UpdateTeamUseCase,
     private readonly findAllUseCase: FindAllTeamsUseCase,
-    private readonly findByIdUseCase: FindTeamByIdUseCase,
+    private readonly findOneUseCase: FindTeamByIdUseCase,
     private readonly removeByIdUseCase: RemoveTeamByIdUseCase
   ) {
     super({
@@ -42,8 +42,8 @@ export class TeamFacade extends Store<TeamState> {
     this.findAllUseCase.execute().then((data) => this.setState({ data }));
   }
 
-  loadTeam(id: string) {
-    this.findByIdUseCase.execute(id).then((team) => this.setState({ team }));
+  findTeam(id: string) {
+    this.findOneUseCase.execute(id).then((team) => this.setState({ team }));
   }
 
   createTeam(team: CreateTeamDto) {

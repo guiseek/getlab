@@ -1,8 +1,9 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CreateTeamDto, TeamFacade, UpdateTeamDto } from '@getlab/data-access';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Subject, map, shareReplay, takeUntil } from 'rxjs';
 import { MatButton } from '@angular/material/button';
-import { Component, ViewChild } from '@angular/core';
-import { map, shareReplay } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 import { TeamForm } from '../../forms';
 
 @Component({
@@ -10,7 +11,9 @@ import { TeamForm } from '../../forms';
   templateUrl: './team.container.html',
   styleUrls: ['./team.container.scss'],
 })
-export class TeamContainer {
+export class TeamContainer implements OnInit, OnDestroy {
+  #subject = new Subject<void>();
+
   @ViewChild('resetRef', { static: true })
   resetButton!: MatButton;
   get resetRef() {
@@ -31,9 +34,20 @@ export class TeamContainer {
 
   constructor(
     private bpObserver: BreakpointObserver,
-    readonly teamFacade: TeamFacade
-  ) {
+    readonly teamFacade: TeamFacade,
+    readonly route: ActivatedRoute
+  ) {}
+
+  ngOnInit() {
     this.teamFacade.load();
+
+    this.teamFacade.team$.pipe(takeUntil(this.#subject)).subscribe((team) => {
+      if (team) this.teamForm.patchValue(team);
+    });
+
+    this.route.params.pipe(takeUntil(this.#subject)).subscribe(({ id }) => {
+      if (id) this.teamFacade.findTeam(id);
+    });
   }
 
   onSubmit() {
@@ -55,5 +69,10 @@ export class TeamContainer {
 
   #update(value: UpdateTeamDto) {
     this.teamFacade.updateTeam(value);
+  }
+
+  ngOnDestroy() {
+    this.#subject.next();
+    this.#subject.complete();
   }
 }

@@ -21,6 +21,10 @@ export class ScheduleMockRepositoryImpl
     return super.findOne(id, 'id');
   }
 
+  override filterBy<P extends keyof Schedule>(prop: P, ...ids: Schedule[P][]) {
+    return super.filterBy(prop, ...ids);
+  }
+
   override findAll() {
     return super.findAll();
   }

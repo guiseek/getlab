@@ -98,10 +98,13 @@ figure {
   margin-bottom: 16px;
 }
 
-.cdk-cell {
-  // text-transform: capitalize;
+.cdk-column-byweekday {
+  text-transform: capitalize;
 }
+.cdk-header-cell,
 .cdk-column-ref,
+.cdk-column-date,
+.cdk-column-time,
 .cdk-column-team {
   font-weight: bold;
 }
@@ -112,6 +115,10 @@ figure {
   &:last-child {
     padding-right: 8px;
   }
+}
+
+a.mat-mdc-icon-button {
+  display: inline-flex;
 }
 
 .mat-muted {
@@ -136,7 +143,7 @@ strong {
   flex: 1;
 }
 
-.minw {
+.min {
   &-100 {
     min-width: 100px;
   }

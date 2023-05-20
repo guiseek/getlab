@@ -1,5 +1,5 @@
 import { SpreadsheetFacade, ScheduleFacade, TeamFacade } from './application';
-import { Token, di } from '@getlab/util-core';
+import { Token, register, transfer } from '@getlab/util-core';
 import {
   ScheduleStorageRepositoryImpl,
   TeamStorageRepositoryImpl,
@@ -17,8 +17,10 @@ import {
   ParseSpreadsheetUseCase,
   BuildSpreadsheetUseCase,
   FindAllSchedulesUseCase,
+  FindScheduleByIdUseCase,
   RemoveScheduleByIdUseCase,
   DownloadSpreadsheetUseCase,
+  FindSchedulesByIdUseCase,
 } from '@getlab/domain';
 
 const STORAGE_TOKEN = new Token('storage');
@@ -27,7 +29,7 @@ const SCHEDULE_TOKEN = new Token('schedule');
 
 export const providers = {
   infrastructure() {
-    di.register(
+    register(
       {
         for: STORAGE_TOKEN,
         use: localStorage,
@@ -53,7 +55,7 @@ export const providers = {
     );
   },
   useCases() {
-    di.register(
+    register(
       {
         for: CreateTeamUseCase,
         use: CreateTeamUseCase,
@@ -95,6 +97,16 @@ export const providers = {
         add: [ScheduleRepository],
       },
       {
+        for: FindScheduleByIdUseCase,
+        use: FindScheduleByIdUseCase,
+        add: [ScheduleRepository],
+      },
+      {
+        for: FindSchedulesByIdUseCase,
+        use: FindSchedulesByIdUseCase,
+        add: [ScheduleRepository],
+      },
+      {
         for: RemoveScheduleByIdUseCase,
         use: RemoveScheduleByIdUseCase,
         add: [ScheduleRepository],
@@ -114,7 +126,7 @@ export const providers = {
     );
   },
   application() {
-    di.register(
+    register(
       {
         for: TeamFacade,
         use: TeamFacade,
@@ -133,6 +145,8 @@ export const providers = {
           CreateScheduleUseCase,
           UpdateScheduleUseCase,
           FindAllSchedulesUseCase,
+          FindScheduleByIdUseCase,
+          FindSchedulesByIdUseCase,
           RemoveScheduleByIdUseCase,
         ],
       },
@@ -148,6 +162,6 @@ export const providers = {
     );
   },
   transfer() {
-    return di.transfer();
+    return transfer();
   },
 };

@@ -1,5 +1,5 @@
+import { inject, register } from './di';
 import { Token } from './types';
-import di from './di';
 
 const NAME_TOKEN = new Token('name');
 
@@ -13,7 +13,9 @@ class ConcreteImpl implements Abstraction {
   constructor(private _name: string) {}
 }
 
-di.register(
+const FACTORY_TOKEN = new Token<Abstraction>('factory');
+
+register(
   {
     for: NAME_TOKEN,
     use: 'team',
@@ -22,22 +24,36 @@ di.register(
     for: Abstraction,
     use: ConcreteImpl,
     add: [NAME_TOKEN],
+  },
+  {
+    for: FACTORY_TOKEN,
+    use: (name: string) => {
+      return new ConcreteImpl(name);
+    },
+    add: [NAME_TOKEN],
   }
 );
 
 describe('Util Core', () => {
   it('token should be team', () => {
-    const name = di.get(NAME_TOKEN);
+    const name = inject(NAME_TOKEN);
     expect(name).toEqual('team');
   });
 
   it('abstraction should be concrete impl', () => {
-    const abstraction = di.get(Abstraction);
+    const abstraction = inject(Abstraction);
     expect(abstraction).toBeInstanceOf(ConcreteImpl);
   });
 
   it('abstraction name should be team', () => {
-    const abstraction = di.get(Abstraction);
+    const abstraction = inject(Abstraction);
+    expect(abstraction.name).toEqual('team');
+  });
+
+  it('factory fn should be called with name team', () => {
+    const abstraction = inject(FACTORY_TOKEN);
+    console.log(abstraction);
+
     expect(abstraction.name).toEqual('team');
   });
 });

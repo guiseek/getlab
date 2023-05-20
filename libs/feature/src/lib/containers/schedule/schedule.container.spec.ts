@@ -1,5 +1,6 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { ScheduleContainer } from './schedule.container';
 import { providers } from '@getlab/data-access';
 import { MATERIAL_MODULES } from '../../material-modules';
@@ -18,6 +19,7 @@ describe('ScheduleContainer', () => {
     await TestBed.configureTestingModule({
       imports: [
         MATERIAL_MODULES,
+        RouterTestingModule,
         ReactiveFormsModule,
         BrowserAnimationsModule,
       ],

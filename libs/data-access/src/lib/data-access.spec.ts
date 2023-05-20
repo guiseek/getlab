@@ -1,12 +1,14 @@
-import { ScheduleMockRepositoryImpl } from './infrastructure/schedule-mock.repository.impl';
-import { TeamMockRepositoryImpl } from './infrastructure/team-mock.repository.impl';
+import { Token, inject, register } from '@getlab/util-core';
+import {
+  ScheduleMockRepositoryImpl,
+  TeamMockRepositoryImpl,
+} from './infrastructure';
 import {
   Team,
   Schedule,
   TeamRepository,
   ScheduleRepository,
 } from '@getlab/domain';
-import { Token, di } from '@getlab/util-core';
 import { TeamFacade } from './application/team.facade';
 import { providers } from './providers';
 
@@ -34,7 +36,7 @@ const SCHEDULES: Schedule[] = [
   },
 ];
 
-di.register(
+register(
   {
     for: TEAM_MOCK_TOKEN,
     use: TEAMS,
@@ -58,13 +60,12 @@ di.register(
 providers.useCases();
 providers.application();
 
-
 describe('Data Access', () => {
   describe('Application', () => {
     let facade: TeamFacade;
 
     beforeEach(() => {
-      facade = di.get(TeamFacade);
+      facade = inject(TeamFacade);
     });
 
     it('data should be empty', () => {

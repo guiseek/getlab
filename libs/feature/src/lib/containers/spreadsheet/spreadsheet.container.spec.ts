@@ -1,5 +1,6 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { SpreadsheetContainer } from './spreadsheet.container';
 import { providers } from '@getlab/data-access';
 import { MATERIAL_MODULES } from '../../material-modules';
@@ -18,8 +19,9 @@ describe('SpreadsheetContainer', () => {
     await TestBed.configureTestingModule({
       imports: [
         MATERIAL_MODULES,
+        RouterTestingModule,
         BrowserAnimationsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
       ],
       declarations: [SpreadsheetContainer, WeekdayPipe],
       providers: [providers.transfer()],

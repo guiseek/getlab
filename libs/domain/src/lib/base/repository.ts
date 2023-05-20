@@ -14,6 +14,10 @@ export interface FindOne<I, K extends keyof I, O> {
   findOne(key: I[K]): Promise<O>;
 }
 
+export interface FilterBy<I, O> {
+  filterBy<K extends keyof I>(key: K, ...values: I[K][]): Promise<O[]>;
+}
+
 export interface FindAll<O> {
   findAll(): Promise<O[]>;
 }

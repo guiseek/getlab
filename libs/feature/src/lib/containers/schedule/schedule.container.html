@@ -3,7 +3,7 @@
 </mat-toolbar>
 
 <section class="row">
-  <div class="flex col minw-500">
+  <div class="flex col gap-16 min-500">
     <mat-card *ngIf="teamFacade.hasNoTeams$ | async">
       <mat-card-header>
         <svg mat-card-avatar>
@@ -13,6 +13,7 @@
         <mat-card-subtitle> Sobre solicitação de reserva </mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
+        Crie uma turma antes de
         <p>
           O formulário ao lado está desabilitado porque não temos nenhuma turma
           armazenada.
@@ -25,7 +26,7 @@
       <mat-card-actions>
         <a mat-button routerLink="/turmas">
           <mat-icon>arrow_back</mat-icon>
-          Navegar para turmas
+          Navegar para a página de turmas
         </a>
       </mat-card-actions>
     </mat-card>
@@ -50,17 +51,16 @@
         <ng-container matColumnDef="time">
           <th mat-header-cell *matHeaderCellDef>Horário</th>
           <td mat-cell *matCellDef="let row">
-            <strong>{{ row.timeStart }}</strong> ~
-            <strong>{{ row.timeEnd }}</strong>
+            {{ row.timeStart }} ~ {{ row.timeEnd }}
           </td>
         </ng-container>
 
         <ng-container matColumnDef="update">
           <th mat-header-cell *matHeaderCellDef></th>
           <td mat-cell *matCellDef="let element">
-            <button mat-icon-button (click)="scheduleForm.patchValue(element)">
+            <a mat-icon-button [routerLink]="['/reservas', element.id]">
               <mat-icon>edit</mat-icon>
-            </button>
+            </a>
           </td>
         </ng-container>
         <ng-container matColumnDef="remove">
@@ -80,7 +80,7 @@
       </table>
     </mat-card>
   </div>
-  <div class="col minw-300">
+  <div class="col min-300">
     <form
       id="form"
       [formGroup]="scheduleForm"
@@ -96,10 +96,10 @@
         <mat-card-content>
           <div class="flex col gap-8">
             <div class="row" *ngIf="teamFacade.data$ | async as data">
-              <section class="col">
+              <section class="col min-200">
                 <mat-form-field *ngIf="data.length > 0">
                   <mat-label>Turma</mat-label>
-                  <mat-select formControlName="team">
+                  <mat-select formControlName="team" [compareWith]="compareFn">
                     <mat-option *ngFor="let team of data" [value]="team">
                       {{ team.ref }}
                     </mat-option>
@@ -107,7 +107,7 @@
                   <mat-error>Selecione a turma</mat-error>
                 </mat-form-field>
               </section>
-              <section class="col minw-200">
+              <section class="col min-200">
                 <mat-form-field>
                   <mat-label>Frequência</mat-label>
                   <mat-select formControlName="interval">
@@ -120,7 +120,7 @@
               </section>
             </div>
             <div class="row">
-              <section class="col">
+              <section class="col min-200">
                 <mat-form-field>
                   <mat-label>Dia da semana</mat-label>
                   <mat-select formControlName="byweekday">
@@ -135,7 +135,7 @@
                   <mat-error>Selecione o dia da semana</mat-error>
                 </mat-form-field>
               </section>
-              <section class="col minw-100">
+              <section class="col min-100">
                 <mat-form-field>
                   <mat-label>Inicia</mat-label>
                   <mat-select formControlName="timeStart" required>
@@ -151,7 +151,7 @@
                 </mat-form-field>
               </section>
 
-              <section class="col minw-100">
+              <section class="col min-100">
                 <mat-form-field>
                   <mat-label>Término</mat-label>
                   <mat-select formControlName="timeEnd" required>

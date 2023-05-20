@@ -1,5 +1,6 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TeamContainer } from './team.container';
 import { providers } from '@getlab/data-access';
@@ -16,7 +17,12 @@ describe('TeamContainer', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [TeamContainer],
-      imports: [MATERIAL_MODULES, BrowserAnimationsModule, ReactiveFormsModule],
+      imports: [
+        MATERIAL_MODULES,
+        RouterTestingModule,
+        BrowserAnimationsModule,
+        ReactiveFormsModule,
+      ],
       providers: [providers.transfer()],
     }).compileComponents();
 
