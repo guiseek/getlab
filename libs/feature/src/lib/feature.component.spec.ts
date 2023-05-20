@@ -5,7 +5,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 
-
 describe('FeatureComponent', () => {
   let component: FeatureComponent;
   let fixture: ComponentFixture<FeatureComponent>;

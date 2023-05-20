@@ -20,6 +20,6 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('getlab-feature')).toBeDefined()
+    expect(compiled.querySelector('getlab-feature')).toBeDefined();
   });
 });
