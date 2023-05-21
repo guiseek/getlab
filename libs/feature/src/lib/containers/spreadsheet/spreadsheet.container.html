@@ -4,8 +4,8 @@
 
 <section class="flex col gap-16">
   <mat-card>
-    <form class="row" [formGroup]="spreadsheetForm">
-      <section class="col min-300">
+    <form class="flex row align-center" [formGroup]="spreadsheetForm">
+      <section class="col min-200">
         <mat-form-field appearance="outline">
           <mat-label>Período</mat-label>
           <mat-date-range-input
@@ -39,7 +39,7 @@
           </mat-error>
         </mat-form-field>
       </section>
-      <section class="col min-300">
+      <section class="col min-200">
         <mat-form-field appearance="outline">
           <mat-label>Horários</mat-label>
           <mat-select
@@ -49,7 +49,7 @@
             multiple
           >
             <mat-select-trigger>
-              {{schedules?.[0]?.byweekday! | weekday }}
+              <span>{{schedules?.[0]?.byweekday! | weekday }}</span>
               <span *ngIf="(schedules?.length || 0) > 1">
                 (+{{ (schedules?.length || 0) - 1 }} {{ schedules?.length === 2
                 ? 'outro dia' : 'outros dias' }})
@@ -95,29 +95,37 @@
 
       <ng-container matColumnDef="date">
         <th mat-header-cell *matHeaderCellDef>Date</th>
-        <td mat-cell *matCellDef="let element">
+        <td mat-cell *matCellDef="let element" contenteditable>
           {{ element.date | date : 'shortDate' }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="time">
         <th mat-header-cell *matHeaderCellDef>Horário</th>
-        <td mat-cell *matCellDef="let element">{{ element.time }}</td>
+        <td mat-cell *matCellDef="let element" contenteditable>
+          {{ element.time }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="ref">
         <th mat-header-cell *matHeaderCellDef>Turma</th>
-        <td mat-cell *matCellDef="let element">{{ element.ref }}</td>
+        <td mat-cell *matCellDef="let element" contenteditable>
+          {{ element.ref }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="people">
         <th mat-header-cell *matHeaderCellDef>N° de alunos</th>
-        <td mat-cell *matCellDef="let element">{{ element.people }}</td>
+        <td mat-cell *matCellDef="let element" contenteditable>
+          {{ element.people }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="goal">
         <th mat-header-cell *matHeaderCellDef>Finalidade</th>
-        <td mat-cell *matCellDef="let element">{{ element.goal }}</td>
+        <td mat-cell *matCellDef="let element" contenteditable>
+          {{ element.goal }}
+        </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="columns$ | async"></tr>

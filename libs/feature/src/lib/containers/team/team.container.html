@@ -2,7 +2,7 @@
   <h2>Turmas</h2>
 </mat-toolbar>
 
-<section class="row">
+<section #sectionRef class="row">
   <mat-card class="col min-300 overflow-hidden">
     <table mat-table [dataSource]="teamFacade.data$">
       <ng-container matColumnDef="id">
@@ -43,9 +43,10 @@
   </mat-card>
 
   <form
-    class="col min-300"
-    [formGroup]="form"
+    #formRef
     novalidate
+    [formGroup]="form"
+    class="col min-300"
     (submit)="onSubmit('turmas')"
   >
     <mat-card>

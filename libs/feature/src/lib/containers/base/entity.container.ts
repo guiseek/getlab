@@ -1,9 +1,17 @@
-import { Directive, OnDestroy, ViewChild } from '@angular/core';
+import { Directive, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { EntityForm } from './entity.form';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
+/**
+ * @description
+ * Fake directive
+ * Class is using Angular features but is not decorated.
+ * Please add an explicit Angular decorator.
+ *
+ * It's just a base abstraction for the schedule and team components
+ */
 @Directive()
 export abstract class EntityContainer<
   T extends object,
@@ -19,6 +27,18 @@ export abstract class EntityContainer<
     return this.resetButton._elementRef;
   }
 
+  @ViewChild('formRef', { static: true })
+  formRef!: ElementRef<HTMLFormElement>;
+  get formEl() {
+    return this.formRef.nativeElement;
+  }
+
+  @ViewChild('sectionRef', { static: true })
+  sectionRef!: ElementRef<HTMLElement>;
+  get sectionEl() {
+    return this.sectionRef.nativeElement;
+  }
+
   abstract form: EntityForm<T, C, U>;
 
   constructor(protected readonly router: Router) {}
@@ -30,10 +50,16 @@ export abstract class EntityContainer<
       } else {
         this.create(this.form.getValue());
       }
+
       this.resetRef.nativeElement.click();
       this.form.init();
+
       const url = ['/', path];
       this.router.navigate(url);
+
+      this.sectionEl.scrollIntoView({
+        behavior: 'smooth',
+      });
     } else {
       this.form.markAllAsTouched();
     }

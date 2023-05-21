@@ -4,6 +4,7 @@ import { MATERIAL_MODULES } from './material-modules';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
+import { SidenavMenuComponent } from './components';
 
 describe('FeatureComponent', () => {
   let component: FeatureComponent;
@@ -17,7 +18,7 @@ describe('FeatureComponent', () => {
         RouterTestingModule,
         ReactiveFormsModule,
       ],
-      declarations: [FeatureComponent],
+      declarations: [FeatureComponent, SidenavMenuComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(FeatureComponent);

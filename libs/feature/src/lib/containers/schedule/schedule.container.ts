@@ -49,20 +49,15 @@ export class ScheduleContainer
     this.scheduleFacade.load();
     this.teamFacade.load();
 
-    this.teamFacade.hasNoTeams$
-      .pipe(takeUntil(this.subject))
-      .subscribe((hasNoTeams) => {
-        if (hasNoTeams) {
-          this.form.disable();
-        } else {
-          this.form.enable();
-        }
-      });
-
     this.scheduleFacade.schedule$
       .pipe(takeUntil(this.subject))
       .subscribe((schedule) => {
-        if (schedule) this.form.patchValue(schedule);
+        if (schedule) {
+          this.form.patchValue(schedule);
+          this.formEl.scrollIntoView({
+            behavior: 'smooth',
+          });
+        }
       });
 
     this.route.params.pipe(takeUntil(this.subject)).subscribe(({ id }) => {

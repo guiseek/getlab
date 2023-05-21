@@ -43,7 +43,12 @@ export class TeamContainer extends EntityContainer<Team> implements OnInit {
     this.teamFacade.load();
 
     this.teamFacade.team$.pipe(takeUntil(this.subject)).subscribe((team) => {
-      if (team) this.form.patchValue(team);
+      if (team) {
+        this.form.patchValue(team);
+        this.formEl.scrollIntoView({
+          behavior: 'smooth',
+        });
+      }
     });
 
     this.route.params.pipe(takeUntil(this.subject)).subscribe(({ id }) => {

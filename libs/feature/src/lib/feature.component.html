@@ -7,39 +7,7 @@
     [mode]="(isHandset$ | async) ? 'over' : 'side'"
     [opened]="(isHandset$ | async) === false"
   >
-    <mat-toolbar>
-      <h1>GetLab</h1>
-    </mat-toolbar>
-    <mat-divider></mat-divider>
-    <mat-nav-list>
-      <a
-        mat-list-item
-        routerLink="/turmas"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-      >
-        <mat-icon matListItemIcon>groups</mat-icon>
-        <span>Turmas</span>
-      </a>
-      <a
-        mat-list-item
-        routerLink="/reservas"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-      >
-        <mat-icon matListItemIcon>schedule</mat-icon>
-        <span> Horários </span>
-      </a>
-      <a
-        mat-list-item
-        routerLink="/planilha"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-      >
-        <mat-icon matListItemIcon>checklist_rtl</mat-icon>
-        <span>Planilha</span>
-      </a>
-    </mat-nav-list>
+    <getlab-sidenav-menu></getlab-sidenav-menu>
   </mat-sidenav>
 
   <mat-sidenav-content class="sidenav-content">
