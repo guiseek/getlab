@@ -4,10 +4,10 @@ import {
   UpdateTeamDto,
   CreateTeamDto,
 } from '@getlab/data-access';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { ActivatedRoute, Router } from '@angular/router';
 import { map, shareReplay, takeUntil } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 import { ConfirmDialog } from '../../components';
 import { EntityContainer } from '../base';
 import { TeamForm } from '../../forms';
@@ -20,6 +20,12 @@ import { TeamForm } from '../../forms';
 export class TeamContainer extends EntityContainer<Team> implements OnInit {
   form = new TeamForm();
 
+  override label = 'Turma';
+
+  bpObserver = inject(BreakpointObserver);
+  teamFacade = inject(TeamFacade);
+  route = inject(ActivatedRoute);
+
   columns$ = this.bpObserver.observe(Breakpoints.Handset).pipe(
     map((result) => result.matches),
     map((match) => {
@@ -29,15 +35,6 @@ export class TeamContainer extends EntityContainer<Team> implements OnInit {
     }),
     shareReplay()
   );
-
-  constructor(
-    private bpObserver: BreakpointObserver,
-    readonly teamFacade: TeamFacade,
-    override readonly router: Router,
-    readonly route: ActivatedRoute
-  ) {
-    super(router);
-  }
 
   ngOnInit() {
     this.teamFacade.load();

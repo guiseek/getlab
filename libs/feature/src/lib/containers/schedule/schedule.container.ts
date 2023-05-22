@@ -6,9 +6,9 @@ import {
   UpdateScheduleDto,
 } from '@getlab/data-access';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { ActivatedRoute, Router } from '@angular/router';
 import { map, shareReplay, takeUntil } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ConfirmDialog } from '../../components';
 import { ScheduleForm } from '../../forms';
 import { EntityContainer } from '../base';
@@ -24,6 +24,11 @@ export class ScheduleContainer
 {
   form = new ScheduleForm();
 
+  bpObserver = inject(BreakpointObserver);
+  scheduleFacade = inject(ScheduleFacade);
+  teamFacade = inject(TeamFacade);
+  route = inject(ActivatedRoute);
+
   columns$ = this.bpObserver.observe(Breakpoints.Handset).pipe(
     map((result) => result.matches),
     map((match) => {
@@ -33,16 +38,6 @@ export class ScheduleContainer
     }),
     shareReplay()
   );
-
-  constructor(
-    private bpObserver: BreakpointObserver,
-    readonly scheduleFacade: ScheduleFacade,
-    readonly teamFacade: TeamFacade,
-    override readonly router: Router,
-    readonly route: ActivatedRoute
-  ) {
-    super(router);
-  }
 
   ngOnInit() {
     this.form.onInit();
