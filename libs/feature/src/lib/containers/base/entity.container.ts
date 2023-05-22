@@ -1,4 +1,11 @@
-import { Directive, ElementRef, OnDestroy, ViewChild } from '@angular/core';
+import {
+  inject,
+  Directive,
+  ElementRef,
+  OnDestroy,
+  ViewChild,
+} from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatButton } from '@angular/material/button';
 import { EntityForm } from './entity.form';
 import { Router } from '@angular/router';
@@ -21,6 +28,8 @@ export abstract class EntityContainer<
 {
   protected subject = new Subject<void>();
 
+  protected label = 'Registro';
+
   @ViewChild('resetRef', { static: true })
   resetButton!: MatButton;
   get resetRef() {
@@ -41,15 +50,24 @@ export abstract class EntityContainer<
 
   abstract form: EntityForm<T, C, U>;
 
-  constructor(protected readonly router: Router) {}
+  snackBar = inject(MatSnackBar);
+  private router = inject(Router);
 
   onSubmit(path: string) {
     if (this.form.valid) {
+      let message;
+
       if (this.form.hasId) {
         this.update(this.form.getValue());
+        message = `${this.label} alterado(a)`;
       } else {
         this.create(this.form.getValue());
+        message = `${this.label} cadastrado(a)`;
       }
+
+      this.snackBar.open(`${message} com sucesso`, 'OK', {
+        duration: 3000,
+      });
 
       this.resetRef.nativeElement.click();
       this.form.init();

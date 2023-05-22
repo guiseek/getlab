@@ -9,7 +9,7 @@ import { FeatureComponent } from './feature.component';
 import { WeekdayPipe } from './pipes/weekday.pipe';
 import { featureRoutes } from './feature.routes';
 import {
-  CONFIRM_DIALOG,
+  MAT_DIALOG,
   ConfirmDialogComponent,
   SidenavMenuComponent,
 } from './components';
@@ -38,6 +38,6 @@ import {
 })
 export class FeatureModule {
   constructor(readonly matDialog: MatDialog) {
-    register({ for: CONFIRM_DIALOG, use: matDialog });
+    register({ for: MAT_DIALOG, use: matDialog });
   }
 }
