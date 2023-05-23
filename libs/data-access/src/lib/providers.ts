@@ -1,7 +1,9 @@
 import { SpreadsheetFacade, ScheduleFacade, TeamFacade } from './application';
 import { Token, register, transfer } from '@getlab/util-core';
 import {
+  ScheduleHttpRepositoryImpl,
   ScheduleStorageRepositoryImpl,
+  TeamHttpRepositoryImpl,
   TeamStorageRepositoryImpl,
 } from './infrastructure';
 import {
@@ -40,8 +42,9 @@ export const providers = {
       },
       {
         for: TeamRepository,
-        use: TeamStorageRepositoryImpl,
-        add: [STORAGE_TOKEN, TEAM_TOKEN],
+        use: TeamHttpRepositoryImpl,
+        // use: TeamStorageRepositoryImpl,
+        // add: [STORAGE_TOKEN, TEAM_TOKEN],
       },
       {
         for: SCHEDULE_TOKEN,
@@ -49,8 +52,9 @@ export const providers = {
       },
       {
         for: ScheduleRepository,
-        use: ScheduleStorageRepositoryImpl,
-        add: [STORAGE_TOKEN, SCHEDULE_TOKEN],
+        use: ScheduleHttpRepositoryImpl,
+        // use: ScheduleStorageRepositoryImpl,
+        // add: [STORAGE_TOKEN, SCHEDULE_TOKEN],
       }
     );
   },

@@ -1,0 +1,53 @@
+body {
+  .mat-toolbar,
+  .mdc-list-item__primary-text,
+  .mat-mdc-button:not(.mdc-fab) .mdc-button__label,
+  .mat-mdc-card-title {
+    font-family: 'Varela Round', sans-serif;
+    font-weight: 400;
+    line-height: 100%;
+  }
+
+  .mat-mdc-card-header .mat-mdc-card-header-text {
+    color: var(--mdc-dialog-subhead-color);
+  }
+
+  .mdc-list-item.active::before {
+    background-color: var(--mdc-list-list-item-focus-state-layer-color);
+    opacity: var(--mdc-list-list-item-focus-state-layer-opacity);
+  }
+
+  .mat-mdc-card-header {
+    margin-bottom: 16px;
+  }
+
+  .cdk-column-byweekday {
+    text-transform: capitalize;
+  }
+  .cdk-header-cell,
+  .cdk-column-ref,
+  .cdk-column-date,
+  .cdk-column-time,
+  .cdk-column-team {
+    font-weight: bold;
+  }
+  .mdc-data-table__cell.cdk-column-update,
+  .mdc-data-table__cell.cdk-column-remove {
+    width: 48px;
+    padding: 0;
+    &:last-child {
+      padding-right: 8px;
+    }
+  }
+
+  .mat-mdc-card .mat-mdc-form-field-bottom-align {
+    height: 16px;
+    &::before {
+      height: 0;
+    }
+  }
+
+  a.mat-mdc-icon-button {
+    display: inline-flex;
+  }
+}

@@ -2,6 +2,9 @@
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
 @use './scss/palette' as app;
+@use './scss/override';
+@use './scss/grid';
+@use './scss/flex';
 @use 'sass:map';
 
 @include mat.core();
@@ -31,18 +34,9 @@ body {
   font-family: 'Varela Round', sans-serif;
 }
 
-body {
-  * {
-    font-family: 'Varela Round', sans-serif;
-  }
-  .mat-toolbar,
-  .mdc-list-item__primary-text,
-  .mat-mdc-button:not(.mdc-fab) .mdc-button__label,
-  .mat-mdc-card-title {
-    font-family: 'Varela Round', sans-serif;
-    font-weight: 400;
-    line-height: 100%;
-  }
+.navy {
+  color: map.get(app.$navy, 500);
+  fill: map.get(app.$navy, 500);
 }
 
 figure {
@@ -60,11 +54,6 @@ figure {
   text-align: center;
 }
 
-.navy {
-  color: map.get(app.$navy, 500);
-  fill: map.get(app.$navy, 500);
-}
-
 strong {
   color: map.get(app.$navy, 900);
 }
@@ -73,156 +62,14 @@ strong {
   overflow: hidden;
 }
 
-.mat-mdc-card-header .mat-mdc-card-header-text {
-  color: var(--mdc-dialog-subhead-color);
-}
-
-.mdc-list-item.active::before {
-  background-color: var(--mdc-list-list-item-focus-state-layer-color);
-  opacity: var(--mdc-list-list-item-focus-state-layer-opacity);
-}
-
-.mat-mdc-card-header {
-  margin-bottom: 16px;
-}
-
-.cdk-column-byweekday {
-  text-transform: capitalize;
-}
-.cdk-header-cell,
-.cdk-column-ref,
-.cdk-column-date,
-.cdk-column-time,
-.cdk-column-team {
-  font-weight: bold;
-}
-.mdc-data-table__cell.cdk-column-update,
-.mdc-data-table__cell.cdk-column-remove {
-  width: 48px;
-  padding: 0;
-  &:last-child {
-    padding-right: 8px;
-  }
-}
-
-.mat-mdc-card .mat-mdc-form-field-bottom-align {
-  height: 16px;
-  &::before {
-    height: 0;
-  }
-}
 span,
 strong {
   display: inline-flex;
   padding: 0 2px;
 }
-a.mat-mdc-icon-button {
-  display: inline-flex;
-}
 
 .mat-muted {
   opacity: 0.5;
-}
-
-.row {
-  display: flex;
-  flex-flow: row wrap;
-  margin-bottom: 8px;
-  gap: 16px;
-}
-
-.col {
-  flex: 1;
-}
-
-.min {
-  &-100 {
-    min-width: 100px;
-  }
-  &-150 {
-    min-width: 150px;
-  }
-  &-200 {
-    min-width: 200px;
-  }
-  &-250 {
-    min-width: 250px;
-  }
-  &-300 {
-    min-width: 300px;
-  }
-  &-350 {
-    min-width: 350px;
-  }
-}
-
-.col:last-child {
-  margin-right: 0;
-}
-
-.flex {
-  display: flex;
-
-  &.wrap {
-    flex-flow: row wrap;
-  }
-
-  &.row-reverse {
-    flex-direction: row-reverse;
-  }
-  &.space-between {
-    justify-content: space-between;
-  }
-  &.align-center {
-    align-items: center;
-  }
-
-  &.gap-8 {
-    column-gap: 8px;
-  }
-
-  &.gap-16 {
-    column-gap: 16px;
-  }
-
-  &.gap-24 {
-    column-gap: 24px;
-  }
-
-  &.gap-32 {
-    column-gap: 32px;
-  }
-
-  &.col {
-    flex-direction: column;
-
-    &.wrap {
-      flex-flow: column wrap;
-    }
-
-    &.align-center {
-      justify-content: center;
-    }
-    &.space-between {
-      align-content: space-between;
-    }
-
-    &.gap-8 {
-      row-gap: 8px;
-    }
-
-    &.gap-16 {
-      row-gap: 16px;
-    }
-
-    &.gap-24 {
-      row-gap: 24px;
-    }
-
-    &.gap-32 {
-      row-gap: 32px;
-    }
-  }
 }
 
 .fixed {
