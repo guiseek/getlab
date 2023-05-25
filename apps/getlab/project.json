@@ -34,7 +34,13 @@
             }
           ],
           "outputHashing": "all",
-          "baseHref": "/getlab/"
+          "baseHref": "/getlab/",
+          "fileReplacements": [
+            {
+              "replace": "apps/getlab/src/envs/env.ts",
+              "with": "apps/getlab/src/envs/env.prod.ts"
+            }
+          ]
         },
         "development": {
           "buildOptimizer": false,
