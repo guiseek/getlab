@@ -15,6 +15,10 @@ class ConcreteImpl implements Abstraction {
 
 const FACTORY_TOKEN = new Token<Abstraction>('factory');
 
+class DirectImpl {
+  constructor(public abstraction: Abstraction) {}
+}
+
 register(
   {
     for: NAME_TOKEN,
@@ -31,6 +35,10 @@ register(
       return new ConcreteImpl(name);
     },
     add: [NAME_TOKEN],
+  },
+  {
+    for: DirectImpl,
+    add: [Abstraction],
   }
 );
 
@@ -52,8 +60,16 @@ describe('Util Core', () => {
 
   it('factory fn should be called with name team', () => {
     const abstraction = inject(FACTORY_TOKEN);
-    console.log(abstraction);
-
     expect(abstraction.name).toEqual('team');
+  });
+
+  it('direct impl should directImpl instance', () => {
+    const directImpl = inject(DirectImpl);
+    expect(directImpl).toBeInstanceOf(DirectImpl);
+  });
+
+  it('direct impl should has abstraction', () => {
+    const directImpl = inject(DirectImpl);
+    expect(directImpl.abstraction).toBeInstanceOf(ConcreteImpl);
   });
 });
