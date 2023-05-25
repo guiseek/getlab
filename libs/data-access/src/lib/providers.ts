@@ -58,70 +58,56 @@ export const providers = {
     register(
       {
         for: CreateTeamUseCase,
-        use: CreateTeamUseCase,
         add: [TeamRepository],
       },
       {
         for: UpdateTeamUseCase,
-        use: UpdateTeamUseCase,
         add: [TeamRepository],
       },
       {
         for: FindAllTeamsUseCase,
-        use: FindAllTeamsUseCase,
         add: [TeamRepository],
       },
       {
         for: FindTeamByIdUseCase,
-        use: FindTeamByIdUseCase,
         add: [TeamRepository],
       },
       {
         for: RemoveTeamByIdUseCase,
-        use: RemoveTeamByIdUseCase,
         add: [TeamRepository],
       },
       {
         for: CreateScheduleUseCase,
-        use: CreateScheduleUseCase,
         add: [ScheduleRepository],
       },
       {
         for: UpdateScheduleUseCase,
-        use: UpdateScheduleUseCase,
         add: [ScheduleRepository],
       },
       {
         for: FindAllSchedulesUseCase,
-        use: FindAllSchedulesUseCase,
         add: [ScheduleRepository],
       },
       {
         for: FindScheduleByIdUseCase,
-        use: FindScheduleByIdUseCase,
         add: [ScheduleRepository],
       },
       {
         for: FindSchedulesByIdUseCase,
-        use: FindSchedulesByIdUseCase,
         add: [ScheduleRepository],
       },
       {
         for: RemoveScheduleByIdUseCase,
-        use: RemoveScheduleByIdUseCase,
         add: [ScheduleRepository],
       },
       {
         for: BuildSpreadsheetUseCase,
-        use: BuildSpreadsheetUseCase,
       },
       {
         for: DownloadSpreadsheetUseCase,
-        use: DownloadSpreadsheetUseCase,
       },
       {
         for: ParseSpreadsheetUseCase,
-        use: ParseSpreadsheetUseCase,
       }
     );
   },

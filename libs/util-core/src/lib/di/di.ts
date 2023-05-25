@@ -1,4 +1,10 @@
-import type { Type, UseAs, Provider, ProviderKey, ProviderItem } from './types';
+import type {
+  Type,
+  Provider,
+  ProvidedAs,
+  ProviderKey,
+  ProviderItem,
+} from './types';
 
 const container = new Map();
 const relations = new Map();
@@ -10,32 +16,28 @@ export const inject = <T>(type: ProviderKey<T>): T => {
   return concrete;
 };
 
-const instantiate = <T>({ for: key, use }: Provider<T>) => {
-  let useAs: UseAs;
-
-  if (typeof use === 'function') {
+const provide = <T>({ for: key, use }: Provider<T>): ProvidedAs<T> => {
+  const concrete = use ?? key;
+  if (typeof concrete === 'function') {
     const dependencies = relations.get(key);
     try {
-      useAs = 'useClass';
-      const clazz = use as Type<typeof use>;
-      const instance = new clazz(...dependencies) as T;
-      return { instance, useAs };
+      const clazz = concrete as Type<typeof use>;
+      const provided = new clazz(...dependencies) as T;
+      return { provided, useAs: 'useClass' };
     } catch {
-      useAs = 'useFactory';
-      const factory = use as (...params: unknown[]) => any;
-      const instance = factory(...dependencies);
-      return { instance, useAs };
+      const factory = concrete as <R>(...params: unknown[]) => R;
+      const provided = factory<T>(...dependencies);
+      return { provided, useAs: 'useFactory' };
     }
   }
 
-  useAs = 'useValue';
-  return { instance: use as T, useAs };
+  return { provided: concrete as T, useAs: 'useValue' };
 };
 
 const set = <T>(provider: Provider<T>) => {
   relations.set(provider.for, (provider.add ?? []).map(inject));
-  const { instance, useAs } = instantiate(provider);
-  container.set(provider.for, instance);
+  const { provided, useAs } = provide(provider);
+  container.set(provider.for, provided);
   providers.push({ ...provider, useAs });
 };
 
