@@ -1,15 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { CreateScheduleDto } from './dto/create-schedule.dto';
-import { UpdateScheduleDto } from './dto/update-schedule.dto';
-import { InjectModel } from '@nestjs/mongoose';
-import { Schedule } from './schemas/schedule.schema';
+import { CreateScheduleDto } from '../dto/create-schedule.dto';
+import { UpdateScheduleDto } from '../dto/update-schedule.dto';
+import { SchedulesService } from './schedules.service';
+import { Schedule } from '../schemas/schedule.schema';
 import { Model } from 'mongoose';
 
-@Injectable()
-export class SchedulesService {
-  constructor(
-    @InjectModel(Schedule.name) private scheduleModel: Model<Schedule>
-  ) {}
+export class SchedulesServiceImpl implements SchedulesService {
+  constructor(private scheduleModel: Model<Schedule>) {}
 
   create(createScheduleDto: CreateScheduleDto) {
     const createdSchedule = new this.scheduleModel(createScheduleDto);

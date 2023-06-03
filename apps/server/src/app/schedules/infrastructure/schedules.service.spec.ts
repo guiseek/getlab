@@ -1,11 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { SchedulesService } from './schedules.service';
 import { getModelToken } from '@nestjs/mongoose';
-import { Schedule } from './schemas/schedule.schema';
+import { Provider } from '@nestjs/common';
+import { SchedulesServiceImpl } from './schedules.service.impl';
+import { SchedulesService } from './schedules.service';
+import { Schedule } from '../schemas/schedule.schema';
 
 export const scheduleModel = {
   async save() {
-    return {}
+    return {};
   },
   async find(...params: unknown[]) {
     return {
@@ -25,18 +27,24 @@ export const scheduleModel = {
   },
 };
 
+export const providers: Provider[] = [
+  {
+    provide: getModelToken(Schedule.name),
+    useValue: scheduleModel,
+  },
+  {
+    provide: SchedulesService,
+    useFactory: (model) => new SchedulesServiceImpl(model),
+    inject: [getModelToken(Schedule.name)],
+  },
+];
+
 describe('SchedulesService', () => {
   let service: SchedulesService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        SchedulesService,
-        {
-          provide: getModelToken(Schedule.name),
-          useValue: scheduleModel,
-        },
-      ],
+      providers,
     }).compile();
 
     service = module.get<SchedulesService>(SchedulesService);

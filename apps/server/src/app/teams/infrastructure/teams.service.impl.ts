@@ -1,13 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { CreateTeamDto } from './dto/create-team.dto';
-import { UpdateTeamDto } from './dto/update-team.dto';
-import { InjectModel } from '@nestjs/mongoose';
-import { Team } from './schemas/team.schema';
+import { CreateTeamDto } from '../dto/create-team.dto';
+import { UpdateTeamDto } from '../dto/update-team.dto';
+import { TeamsService } from './teams.service';
+import { Team } from '../schemas/team.schema';
 import { Model } from 'mongoose';
 
-@Injectable()
-export class TeamsService {
-  constructor(@InjectModel(Team.name) private teamModel: Model<Team>) {}
+export class TeamsServiceImpl implements TeamsService {
+  constructor(private teamModel: Model<Team>) {}
 
   async create(createTeamDto: CreateTeamDto) {
     const createdTeam = new this.teamModel(createTeamDto);

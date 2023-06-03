@@ -8,7 +8,7 @@ import {
   Delete,
   Controller,
 } from '@nestjs/common';
-import { SchedulesService } from './schedules.service';
+import { SchedulesService } from './infrastructure/schedules.service';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
 

@@ -7,7 +7,9 @@ import { SchedulesModule } from './schedules/schedules.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost/getlab'),
+    MongooseModule.forRoot('mongodb://localhost/getlab', {
+      connectionName: 'getlab',
+    }),
     TeamsModule,
     SchedulesModule,
   ],

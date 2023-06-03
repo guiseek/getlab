@@ -1,11 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TeamsService } from './teams.service';
 import { getModelToken } from '@nestjs/mongoose';
-import { Team } from './schemas/team.schema';
+import { Provider } from '@nestjs/common';
+import { TeamsServiceImpl } from './teams.service.impl';
+import { TeamsService } from './teams.service';
+import { Team } from '../schemas/team.schema';
 
 export const teamModel = {
   async save() {
-    return {}
+    return {};
   },
   async find(...params: unknown[]) {
     return {
@@ -25,18 +27,24 @@ export const teamModel = {
   },
 };
 
+export const providers: Provider[] = [
+  {
+    provide: getModelToken(Team.name),
+    useValue: teamModel,
+  },
+  {
+    provide: TeamsService,
+    useFactory: (model) => new TeamsServiceImpl(model),
+    inject: [getModelToken(Team.name)],
+  },
+];
+
 describe('TeamsService', () => {
   let service: TeamsService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        TeamsService,
-        {
-          provide: getModelToken(Team.name),
-          useValue: teamModel,
-        },
-      ],
+      providers,
     }).compile();
 
     service = module.get<TeamsService>(TeamsService);
