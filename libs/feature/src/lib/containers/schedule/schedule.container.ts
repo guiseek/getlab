@@ -5,13 +5,14 @@ import {
   CreateScheduleDto,
   UpdateScheduleDto,
 } from '@getlab/data-access';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { map, shareReplay, takeUntil } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { map, shareReplay } from 'rxjs';
 import { ConfirmDialog } from '../../components';
 import { ScheduleForm } from '../../forms';
 import { EntityContainer } from '../base';
+import { isBreakpoint } from '../shared';
 
 @Component({
   selector: 'getlab-schedule',
@@ -24,18 +25,18 @@ export class ScheduleContainer
 {
   form = new ScheduleForm();
 
-  bpObserver = inject(BreakpointObserver);
+  override label = 'Horário';
+
   scheduleFacade = inject(ScheduleFacade);
   teamFacade = inject(TeamFacade);
   route = inject(ActivatedRoute);
 
-  columns$ = this.bpObserver.observe(Breakpoints.Handset).pipe(
-    map((result) => result.matches),
-    map((match) => {
-      return match
+  columns$ = isBreakpoint('Handset').pipe(
+    map((match) =>
+      match
         ? ['time', 'team', 'update', 'remove']
-        : ['time', 'byweekday', 'team', 'update', 'remove'];
-    }),
+        : ['time', 'byweekday', 'team', 'update', 'remove']
+    ),
     shareReplay()
   );
 
@@ -45,7 +46,7 @@ export class ScheduleContainer
     this.teamFacade.load();
 
     this.scheduleFacade.schedule$
-      .pipe(takeUntil(this.subject))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((schedule) => {
         if (schedule) {
           this.form.patchValue(schedule);
@@ -55,9 +56,11 @@ export class ScheduleContainer
         }
       });
 
-    this.route.params.pipe(takeUntil(this.subject)).subscribe(({ id }) => {
-      if (id) this.scheduleFacade.findSchedule(id);
-    });
+    this.route.params
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(({ id }) => {
+        if (id) this.scheduleFacade.findSchedule(id);
+      });
   }
 
   @ConfirmDialog<Schedule>({

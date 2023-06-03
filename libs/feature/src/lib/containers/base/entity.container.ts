@@ -2,14 +2,13 @@ import {
   inject,
   Directive,
   ElementRef,
-  OnDestroy,
   ViewChild,
+  DestroyRef,
 } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatButton } from '@angular/material/button';
 import { EntityForm } from './entity.form';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
 
 /**
  * @description
@@ -24,9 +23,8 @@ export abstract class EntityContainer<
   T extends object,
   C = unknown,
   U = unknown
-> implements OnDestroy
-{
-  protected subject = new Subject<void>();
+> {
+  protected destroyRef = inject(DestroyRef);
 
   protected label = 'Registro';
 
@@ -92,10 +90,5 @@ export abstract class EntityContainer<
       return e1.id === e2.id;
     }
     return false;
-  }
-
-  ngOnDestroy() {
-    this.subject.next();
-    this.subject.complete();
   }
 }

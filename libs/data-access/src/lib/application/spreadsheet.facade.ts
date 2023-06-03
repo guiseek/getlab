@@ -43,6 +43,10 @@ export class SpreadsheetFacade extends Store<SpreadsheetState> {
     });
   }
 
+  clear() {
+    this.setState({ data: [], parsed: '' });
+  }
+
   download() {
     this.downloadUseCase.execute(this.state.data);
   }
