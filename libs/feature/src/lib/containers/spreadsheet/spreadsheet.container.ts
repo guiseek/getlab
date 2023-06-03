@@ -1,31 +1,35 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, Router } from '@angular/router';
+import { map, shareReplay } from 'rxjs';
+import { SpreadsheetForm } from '../../forms';
 import {
   Schedule,
   ScheduleFacade,
   SpreadsheetFacade,
 } from '@getlab/data-access';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, map, shareReplay, takeUntil } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
-import { SpreadsheetForm } from '../../forms';
+import { isBreakpoint } from '../shared';
 
 @Component({
   selector: 'getlab-spreadsheet',
   templateUrl: './spreadsheet.container.html',
   styleUrls: ['./spreadsheet.container.scss'],
 })
-export class SpreadsheetContainer implements OnInit, OnDestroy {
-  #subject = new Subject<void>();
+export class SpreadsheetContainer implements OnInit {
+  protected destroyRef = inject(DestroyRef);
+  protected router = inject(Router);
+  protected route = inject(ActivatedRoute);
+  scheduleFacade = inject(ScheduleFacade);
+  spreadsheetFacade = inject(SpreadsheetFacade);
 
-  spreadsheetForm = new SpreadsheetForm();
+  readonly spreadsheetForm = new SpreadsheetForm();
 
-  columns$ = this.bpObserver.observe(Breakpoints.Handset).pipe(
-    map((result) => result.matches),
-    map((match) => {
-      return match
+  columns$ = isBreakpoint('Handset').pipe(
+    map((match) =>
+      match
         ? ['date', 'time', 'ref']
-        : ['date', 'time', 'ref', 'people', 'goal'];
-    }),
+        : ['date', 'time', 'ref', 'people', 'goal']
+    ),
     shareReplay()
   );
 
@@ -33,19 +37,12 @@ export class SpreadsheetContainer implements OnInit, OnDestroy {
     return this.spreadsheetForm.controls.schedules.value;
   }
 
-  constructor(
-    private bpObserver: BreakpointObserver,
-    readonly scheduleFacade: ScheduleFacade,
-    readonly spreadsheetFacade: SpreadsheetFacade,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router
-  ) {
-    this.scheduleFacade.load();
-  }
-
   ngOnInit() {
+    this.spreadsheetFacade.clear();
+    this.scheduleFacade.load();
+
     this.route.queryParams
-      .pipe(takeUntil(this.#subject))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(({ dtstart, until, scheduleIds = [] }) => {
         if (dtstart && until) {
           this.#patchFormDate(new Date(dtstart), new Date(until));
@@ -56,7 +53,7 @@ export class SpreadsheetContainer implements OnInit, OnDestroy {
       });
 
     this.scheduleFacade.filtered$
-      .pipe(takeUntil(this.#subject))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((schedules) => {
         const { dtstart, until } = this.spreadsheetForm.value;
         if (dtstart && until) {
@@ -66,20 +63,20 @@ export class SpreadsheetContainer implements OnInit, OnDestroy {
       });
 
     this.spreadsheetFacade.data$
-      .pipe(takeUntil(this.#subject))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((data) => {
         this.spreadsheetFacade.parse(data);
       });
 
-    this.spreadsheetForm.valueChanges.subscribe(
-      ({ schedules, dtstart, until }) => {
+    this.spreadsheetForm.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(({ schedules, dtstart, until }) => {
         if (schedules && schedules.length && dtstart && until) {
           const scheduleIds = schedules.map(({ id }) => id);
           const queryParams = { dtstart, until, scheduleIds };
           this.router.navigate(['.'], { queryParams });
         }
-      }
-    );
+      });
   }
 
   #patchFormDate(dtstart: Date, until: Date) {
@@ -92,10 +89,5 @@ export class SpreadsheetContainer implements OnInit, OnDestroy {
 
   compareFn(schedule1: Schedule, schedule2: Schedule) {
     return schedule1 && schedule2 && schedule1.id === schedule2.id;
-  }
-
-  ngOnDestroy() {
-    this.#subject.next();
-    this.#subject.complete();
   }
 }

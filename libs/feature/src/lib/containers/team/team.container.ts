@@ -5,11 +5,12 @@ import {
   CreateTeamDto,
 } from '@getlab/data-access';
 import { Component, OnInit, inject } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { map, shareReplay, takeUntil } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
+import { map, shareReplay } from 'rxjs';
 import { ConfirmDialog } from '../../components';
 import { EntityContainer } from '../base';
+import { isBreakpoint } from '../shared';
 import { TeamForm } from '../../forms';
 
 @Component({
@@ -22,35 +23,34 @@ export class TeamContainer extends EntityContainer<Team> implements OnInit {
 
   override label = 'Turma';
 
-  bpObserver = inject(BreakpointObserver);
   teamFacade = inject(TeamFacade);
   route = inject(ActivatedRoute);
 
-  columns$ = this.bpObserver.observe(Breakpoints.Handset).pipe(
-    map((result) => result.matches),
-    map((match) => {
-      return match
-        ? ['ref', 'update', 'remove']
-        : ['ref', 'name', 'update', 'remove'];
-    }),
+  columns$ = isBreakpoint('Handset').pipe(
+    map((match) =>
+      match ? ['ref', 'update', 'remove'] : ['ref', 'name', 'update', 'remove']
+    ),
     shareReplay()
   );
 
   ngOnInit() {
     this.teamFacade.load();
 
-    this.teamFacade.team$.pipe(takeUntil(this.subject)).subscribe((team) => {
-      if (team) {
-        this.form.patchValue(team);
-        this.formEl.scrollIntoView({
-          behavior: 'smooth',
-        });
-      }
-    });
+    this.teamFacade.team$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((team) => {
+        if (team) {
+          const behavior = 'smooth';
+          this.form.patchValue(team);
+          this.formEl.scrollIntoView({ behavior });
+        }
+      });
 
-    this.route.params.pipe(takeUntil(this.subject)).subscribe(({ id }) => {
-      if (id) this.teamFacade.findTeam(id);
-    });
+    this.route.params
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(({ id }) => {
+        if (id) this.teamFacade.findTeam(id);
+      });
   }
 
   @ConfirmDialog<Team>({
