@@ -17,7 +17,7 @@ export class SchedulesServiceImpl implements SchedulesService {
   }
 
   findOne(id: string) {
-    return this.scheduleModel.findOne({ id });
+    return this.scheduleModel.findById(id);
   }
 
   update(id: string, updateScheduleDto: UpdateScheduleDto) {

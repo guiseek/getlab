@@ -1,12 +1,16 @@
 export * from './lib/application/spreadsheet.facade';
 export * from './lib/application/schedule.facade';
 export * from './lib/application/team.facade';
+export * from './lib/application/user.facade';
 export * from './lib/providers';
 
 import type {
   Team,
+  User,
   Schedule,
   DateRangeDto,
+  UpdateUserDto,
+  CreateUserDto,
   UpdateTeamDto,
   CreateTeamDto,
   CreateScheduleDto,
@@ -19,7 +23,10 @@ export type {
   CreateScheduleDto,
   CreateTeamDto,
   UpdateTeamDto,
+  CreateUserDto,
+  UpdateUserDto,
   DateRangeDto,
   Schedule,
   Team,
+  User,
 };

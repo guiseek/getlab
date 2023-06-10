@@ -1,12 +1,25 @@
-import { SpreadsheetFacade, ScheduleFacade, TeamFacade } from './application';
+import {
+  SpreadsheetFacade,
+  ScheduleFacade,
+  TeamFacade,
+  UserFacade,
+} from './application';
 import { Token, register, transfer } from '@getlab/util-core';
 import {
   ScheduleHttpRepositoryImpl,
   ScheduleStorageRepositoryImpl,
   TeamHttpRepositoryImpl,
   TeamStorageRepositoryImpl,
+  UserHttpRepositoryImpl,
+  UserStorageRepositoryImpl,
 } from './infrastructure';
 import {
+  UserRepository,
+  CreateUserUseCase,
+  UpdateUserUseCase,
+  FindAllUsersUseCase,
+  FindUserByIdUseCase,
+  RemoveUserByIdUseCase,
   TeamRepository,
   CreateTeamUseCase,
   UpdateTeamUseCase,
@@ -43,6 +56,12 @@ export const providers = {
       {
         for: TeamRepository,
         use: TeamHttpRepositoryImpl,
+        // use: TeamStorageRepositoryImpl,
+        // add: [STORAGE_TOKEN, TEAM_TOKEN],
+      },
+      {
+        for: UserRepository,
+        use: UserHttpRepositoryImpl,
         // use: TeamStorageRepositoryImpl,
         // add: [STORAGE_TOKEN, TEAM_TOKEN],
       },
@@ -84,6 +103,31 @@ export const providers = {
         for: RemoveTeamByIdUseCase,
         use: RemoveTeamByIdUseCase,
         add: [TeamRepository],
+      },
+      {
+        for: CreateUserUseCase,
+        use: CreateUserUseCase,
+        add: [UserRepository],
+      },
+      {
+        for: UpdateUserUseCase,
+        use: UpdateUserUseCase,
+        add: [UserRepository],
+      },
+      {
+        for: FindAllUsersUseCase,
+        use: FindAllUsersUseCase,
+        add: [UserRepository],
+      },
+      {
+        for: FindUserByIdUseCase,
+        use: FindUserByIdUseCase,
+        add: [UserRepository],
+      },
+      {
+        for: RemoveUserByIdUseCase,
+        use: RemoveUserByIdUseCase,
+        add: [UserRepository],
       },
       {
         for: CreateScheduleUseCase,
@@ -140,6 +184,17 @@ export const providers = {
           FindAllTeamsUseCase,
           FindTeamByIdUseCase,
           RemoveTeamByIdUseCase,
+        ],
+      },
+      {
+        for: UserFacade,
+        use: UserFacade,
+        add: [
+          CreateUserUseCase,
+          UpdateUserUseCase,
+          FindAllUsersUseCase,
+          FindUserByIdUseCase,
+          RemoveUserByIdUseCase,
         ],
       },
       {

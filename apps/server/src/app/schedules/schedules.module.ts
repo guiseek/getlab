@@ -1,11 +1,21 @@
 import { Module } from '@nestjs/common';
-import { SchedulesService } from './infrastructure/schedules.service';
-import { SchedulesController } from './schedules.controller';
-import { MongooseModule } from '@nestjs/mongoose';
+import { MongooseModule, getModelToken } from '@nestjs/mongoose';
+import { SchedulesService, SchedulesServiceImpl } from './infrastructure';
 import { Schedule, ScheduleSchema } from './schemas/schedule.schema';
-import { SchedulesServiceImpl } from './infrastructure/schedules.service.impl';
-import { getModelToken } from '@nestjs/mongoose';
+import { SchedulesController } from './schedules.controller';
+import { Model } from 'mongoose';
 
+/**
+ * O método `forFeature()` do módulo Mongoose configura o seu
+ * módulo definindo quais *models* devem ser registrados no
+ * escopo atual, caso  seja necessário utilizar seu model
+ * em outro módulo da aplicação, você precisará adicionar
+ * o `MongooseModule` a seção `exports` na configuração
+ *
+ * No entando, o mais recomendado neste caso é que você
+ * adicione o SchedulesService a seção exports e mantenha
+ * seus modelos e schemas somente aqui.
+ */
 @Module({
   imports: [
     MongooseModule.forFeature(
@@ -17,7 +27,7 @@ import { getModelToken } from '@nestjs/mongoose';
   providers: [
     {
       provide: SchedulesService,
-      useFactory: (model) => {
+      useFactory: (model: Model<Schedule>) => {
         return new SchedulesServiceImpl(model);
       },
       inject: [getModelToken(Schedule.name, 'getlab')],

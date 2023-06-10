@@ -14,6 +14,7 @@ import {
   SidenavMenuComponent,
 } from './components';
 import {
+  UserContainer,
   TeamContainer,
   ScheduleContainer,
   SpreadsheetContainer,
@@ -29,6 +30,7 @@ import {
   declarations: [
     WeekdayPipe,
     TeamContainer,
+    UserContainer,
     FeatureComponent,
     ScheduleContainer,
     SidenavMenuComponent,

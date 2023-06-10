@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@getlab/data-access": ["libs/data-access/src/index.ts"],
+      "@getlab/docs": ["libs/docs/src/index.ts"],
       "@getlab/domain": ["libs/domain/src/index.ts"],
       "@getlab/feature": ["libs/feature/src/index.ts"],
       "@getlab/util-core": ["libs/util-core/src/index.ts"]

@@ -17,7 +17,7 @@ export class TeamsServiceImpl implements TeamsService {
   }
 
   async findOne(id: string) {
-    return this.teamModel.findOne({ id });
+    return this.teamModel.findById(id);
   }
 
   async update(id: string, updateTeamDto: UpdateTeamDto) {

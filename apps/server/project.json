@@ -58,6 +58,18 @@
           "codeCoverage": true
         }
       }
+    },
+    "compodoc": {
+      "executor": "@twittwer/compodoc:compodoc",
+      "options": {
+        "tsConfig": "apps/server/tsconfig.app.json",
+        "outputPath": "dist/compodoc/server"
+      },
+      "configurations": {
+        "json": {
+          "exportFormat": "json"
+        }
+      }
     }
   },
   "tags": []

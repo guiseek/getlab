@@ -1,8 +1,11 @@
 import { Route } from '@angular/router';
 import { FeatureComponent } from './feature.component';
-import { TeamContainer } from './containers/team/team.container';
-import { ScheduleContainer } from './containers/schedule/schedule.container';
-import { SpreadsheetContainer } from './containers/spreadsheet/spreadsheet.container';
+import {
+  UserContainer,
+  TeamContainer,
+  ScheduleContainer,
+  SpreadsheetContainer,
+} from './containers';
 
 export const featureRoutes: Route[] = [
   {
@@ -16,6 +19,14 @@ export const featureRoutes: Route[] = [
       {
         path: 'turmas',
         component: TeamContainer,
+      },
+      {
+        path: 'usuarios/:id',
+        component: UserContainer,
+      },
+      {
+        path: 'usuarios',
+        component: UserContainer,
       },
       {
         path: 'reservas/:id',

@@ -6,3 +6,6 @@ export * from './storage.repository';
 export * from './team-http.repository';
 export * from './team-mock.repository.impl';
 export * from './team-storage.repository.impl';
+export * from './user-http.repository.impl';
+export * from './user-mock.repository.impl';
+export * from './user-storage.repository.impl';
