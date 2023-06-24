@@ -44,7 +44,7 @@ export class UserStorageRepositoryImpl
   }
 
   findAll() {
-    let data = this.read();
+    const data = this.read();
 
     return Promise.resolve(data);
   }
