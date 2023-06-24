@@ -18,6 +18,6 @@ import { UsersModule } from './users/users.module';
     UsersModule,
     TeamsModule,
     SchedulesModule,
-  ]
+  ],
 })
 export class AppModule {}

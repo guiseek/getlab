@@ -1,9 +1,11 @@
 # Getlab
 
 ## Injeção de dependências
+
 Como registrar suas dependências, direcionando responsabilidades
 
 ### Simples
+
 Classe sem dependência nem substituto concreto
 
 ```ts
@@ -15,6 +17,7 @@ register({ for: MeuService });
 ```
 
 ### Com dependência
+
 Classe contendo uma dependência
 
 Veja que primeiro registramos `DependenciaDoMeuService`, em seguida registramos `MeuServiceComDependencia` indicando para adicionar `DependenciaDoMeuService`, pois ela depende dele pra funcionar corretamente.
@@ -38,6 +41,7 @@ register(
 ```
 
 ### Direcionando responsabilidade
+
 Classe abstrata e classe concreta
 Primeiro criamos uma abstração sem implementação, desta forma:
 
@@ -69,6 +73,7 @@ register({
 ```
 
 ### Direcionando responsabilidade com dependências
+
 Classe abstrata e classe concreta que depende de outras classes
 Em seguida, criamos a classe concreta, que implementa o contrato da abstração:
 
@@ -103,6 +108,7 @@ const meuOutroServico = inject(MeuOutroService);
 # Exemplos reais
 
 ## Organizando
+
 UseCases precisam da infra registrada e Facades precisas dos UseCases registrados, então precisamos começar registradno a infra
 
 ```ts
@@ -159,15 +165,16 @@ import { Component } from '@angular/core';
 @Component({
   standalone: true,
   selector: 'getlab-root',
-  providers: [ transfer() ],
+  providers: [transfer()],
   template: `
     <pre>
       {{ facade.data$ | async | json }}
-    </pre>
+    </pre
+    >
   `,
 })
 export class AppComponent {
-  facade = inject(TeamFacade)
+  facade = inject(TeamFacade);
 }
 ```
 
