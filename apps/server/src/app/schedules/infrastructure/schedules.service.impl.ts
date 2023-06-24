@@ -30,6 +30,6 @@ export class SchedulesServiceImpl implements SchedulesService {
   }
 
   remove(id: string) {
-    return this.scheduleModel.findOneAndRemove({ id });
+    return this.scheduleModel.findByIdAndRemove(id);
   }
 }

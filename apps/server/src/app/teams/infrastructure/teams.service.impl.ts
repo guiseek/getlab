@@ -25,6 +25,6 @@ export class TeamsServiceImpl implements TeamsService {
   }
 
   async remove(id: string) {
-    return this.teamModel.findOneAndRemove({ id });
+    return this.teamModel.findByIdAndRemove(id);
   }
 }
