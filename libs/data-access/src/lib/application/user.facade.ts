@@ -12,6 +12,7 @@ import { Store } from '../base/store';
 
 interface UserState {
   data: User[];
+  error: string | null;
   user: User | null;
   loading: boolean;
 }
@@ -19,6 +20,7 @@ interface UserState {
 export class UserFacade extends Store<UserState> {
   loading$ = this.select((state) => state.loading);
   user$ = this.select((state) => state.user);
+  error$ = this.select((state) => state.error);
   data$ = this.select((state) => state.data);
   hasNoUsers$ = this.select((state) => {
     return state.data.length === 0;
@@ -34,23 +36,30 @@ export class UserFacade extends Store<UserState> {
     super({
       data: [],
       user: null,
+      error: null,
       loading: false,
     });
   }
 
   load() {
-    this.findAllUseCase.execute().then((data) => this.setState({ data }));
+    this.catch(
+      this.findAllUseCase.execute().then((data) => this.setState({ data }))
+    );
   }
 
   findUser(id: string) {
-    this.findOneUseCase.execute(id).then((user) => this.setState({ user }));
+    this.catch(
+      this.findOneUseCase.execute(id).then((user) => this.setState({ user }))
+    );
   }
 
   createUser(user: CreateUserDto) {
-    this.createUseCase.execute(user).then(() => {
-      this.setState({ user: null });
-      this.load();
-    });
+    this.catch(
+      this.createUseCase.execute(user).then(() => {
+        this.setState({ user: null });
+        this.load();
+      })
+    );
   }
 
   clearUser() {
@@ -58,13 +67,21 @@ export class UserFacade extends Store<UserState> {
   }
 
   updateUser(user: UpdateUserDto) {
-    this.updateUseCase.execute(user).then(() => {
-      this.setState({ user: null });
-      this.load();
-    });
+    this.catch(
+      this.updateUseCase.execute(user).then(() => {
+        this.setState({ user: null });
+        this.load();
+      })
+    );
   }
 
   removeUser(id: string) {
-    this.removeByIdUseCase.execute(id).then(() => this.load());
+    this.catch(this.removeByIdUseCase.execute(id).then(() => this.load()));
+  }
+
+  catch<T extends Promise<unknown>>(promise: T) {
+    promise.catch((error) => {
+      this.setState({ error: error.message });
+    });
   }
 }

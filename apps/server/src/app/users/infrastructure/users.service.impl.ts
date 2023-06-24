@@ -25,6 +25,6 @@ export class UsersServiceImpl implements UsersService {
   }
 
   async remove(id: string) {
-    return this.userModel.findOneAndRemove({ id });
+    return this.userModel.findByIdAndRemove(id);
   }
 }

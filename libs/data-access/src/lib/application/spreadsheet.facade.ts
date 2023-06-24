@@ -12,6 +12,7 @@ interface SpreadsheetState {
   data: SpreadsheetRow[];
   loading: boolean;
   parsed: string;
+  error: string | null;
 }
 
 export class SpreadsheetFacade extends Store<SpreadsheetState> {
@@ -27,23 +28,34 @@ export class SpreadsheetFacade extends Store<SpreadsheetState> {
     super({
       data: [],
       parsed: '',
+      error: null,
       loading: false,
     });
   }
 
   build(value: BuildSpreadsheetDto) {
-    this.buildUseCase.execute(value).then((data) => {
-      this.setState({ data });
-    });
+    this.catch(
+      this.buildUseCase.execute(value).then((data) => {
+        this.setState({ data });
+      })
+    );
   }
 
   parse(value: ParseSpreadsheetDto) {
-    this.parseUseCase.execute(value).then((parsed) => {
-      this.setState({ parsed });
-    });
+    this.catch(
+      this.parseUseCase.execute(value).then((parsed) => {
+        this.setState({ parsed });
+      })
+    );
   }
 
   download() {
-    this.downloadUseCase.execute(this.state.data);
+    this.catch(this.downloadUseCase.execute(this.state.data));
+  }
+
+  catch<T extends Promise<unknown>>(promise: T) {
+    promise.catch((error) => {
+      this.setState({ error: error.message });
+    });
   }
 }

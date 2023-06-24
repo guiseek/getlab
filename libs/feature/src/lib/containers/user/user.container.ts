@@ -6,6 +6,7 @@ import {
 } from '@getlab/data-access';
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { map, shareReplay, takeUntil } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { ConfirmDialog } from '../../components';
@@ -45,18 +46,22 @@ export class UserContainer extends EntityContainer<User> implements OnInit {
       this.userFacade.clearUser();
     });
 
-    this.userFacade.user$.pipe(takeUntil(this.subject)).subscribe((user) => {
-      if (user) {
-        this.form.patchValue(user);
-        this.formEl.scrollIntoView({
-          behavior: 'smooth',
-        });
-      }
-    });
+    this.userFacade.user$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((user) => {
+        if (user) {
+          this.form.patchValue(user);
+          this.formEl.scrollIntoView({
+            behavior: 'smooth',
+          });
+        }
+      });
 
-    this.route.params.pipe(takeUntil(this.subject)).subscribe(({ id }) => {
-      if (id) this.userFacade.findUser(id);
-    });
+    this.route.params
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(({ id }) => {
+        if (id) this.userFacade.findUser(id);
+      });
   }
 
   @ConfirmDialog<User>({

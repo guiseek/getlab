@@ -2,6 +2,8 @@
   <h2>Usuários</h2>
 </mat-toolbar>
 
+<p *ngIf="userFacade.error$ | async as error" class="mat-error">{{error}}</p>
+
 <section #sectionRef class="row">
   <mat-card class="col min-300 overflow-hidden">
     <table mat-table [dataSource]="userFacade.data$">
@@ -47,7 +49,7 @@
     novalidate
     [formGroup]="form"
     class="col min-300"
-    (submit)="onSubmit('users')"
+    (submit)="onSubmit('usuarios')"
   >
     <mat-card>
       <mat-card-header>

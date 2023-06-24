@@ -12,6 +12,6 @@ export class UserForm extends EntityForm<User, CreateUserDto, UpdateUserDto> {
   }
 
   init() {
-    this.patchValue({ });
+    this.patchValue({});
   }
 }

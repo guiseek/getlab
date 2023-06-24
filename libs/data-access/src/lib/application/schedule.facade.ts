@@ -13,6 +13,7 @@ import { Store } from '../base/store';
 
 interface ScheduleState {
   data: Schedule[];
+  error: string | null;
   schedule: Schedule | null;
   filtered: Schedule[];
   loading: boolean;
@@ -34,6 +35,7 @@ export class ScheduleFacade extends Store<ScheduleState> {
   ) {
     super({
       data: [],
+      error: null,
       filtered: [],
       schedule: null,
       loading: false,
@@ -41,36 +43,52 @@ export class ScheduleFacade extends Store<ScheduleState> {
   }
 
   load() {
-    this.findAllUseCase.execute().then((data) => this.setState({ data }));
+    this.catch(
+      this.findAllUseCase.execute().then((data) => this.setState({ data }))
+    );
   }
 
   findSchedule(id: string) {
-    this.findOneUseCase
-      .execute(id)
-      .then((schedule) => this.setState({ schedule }));
+    this.catch(
+      this.findOneUseCase
+        .execute(id)
+        .then((schedule) => this.setState({ schedule }))
+    );
   }
 
   findSchedules(...ids: string[]) {
-    this.findManyUseCase
-      .execute(...ids)
-      .then((filtered) => this.setState({ filtered }));
+    this.catch(
+      this.findManyUseCase
+        .execute(...ids)
+        .then((filtered) => this.setState({ filtered }))
+    );
   }
 
   createSchedule(schedule: CreateScheduleDto) {
-    this.createUseCase.execute(schedule).then(() => {
-      this.setState({ schedule: null });
-      this.load();
-    });
+    this.catch(
+      this.createUseCase.execute(schedule).then(() => {
+        this.setState({ schedule: null });
+        this.load();
+      })
+    );
   }
 
   updateSchedule(schedule: UpdateScheduleDto) {
-    this.updateUseCase.execute(schedule).then(() => {
-      this.setState({ schedule: null });
-      this.load();
-    });
+    this.catch(
+      this.updateUseCase.execute(schedule).then(() => {
+        this.setState({ schedule: null });
+        this.load();
+      })
+    );
   }
 
   removeSchedule(id: string) {
-    this.removeByIdUseCase.execute(id).then(() => this.load());
+    this.catch(this.removeByIdUseCase.execute(id).then(() => this.load()));
+  }
+
+  catch<T extends Promise<unknown>>(promise: T) {
+    promise.catch((error) => {
+      this.setState({ error: error.message });
+    });
   }
 }

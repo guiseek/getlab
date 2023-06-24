@@ -11,7 +11,7 @@ export class UpdateUserUseCase implements UseCase<UpdateUserDto, User> {
       const user = await this.repository.findOne(input.id);
       return this.repository.updateOne(input.id, { ...user, ...input });
     } catch (err) {
-      throw `Não foi possível alterar a turma ${input.id}`;
+      throw `Não foi possível alterar o usuário ${input.id}`;
     }
   }
 }
