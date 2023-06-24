@@ -1,11 +1,14 @@
 import { Token, inject, register } from '@getlab/util-core';
 import {
-  ScheduleMockRepositoryImpl,
+  UserMockRepositoryImpl,
   TeamMockRepositoryImpl,
+  ScheduleMockRepositoryImpl,
 } from './infrastructure';
 import {
+  User,
   Team,
   Schedule,
+  UserRepository,
   TeamRepository,
   ScheduleRepository,
 } from '@getlab/domain';
@@ -13,7 +16,16 @@ import { TeamFacade } from './application/team.facade';
 import { providers } from './providers';
 
 const TEAM_MOCK_TOKEN = new Token<Team[]>('team.mock');
+const USER_MOCK_TOKEN = new Token<User[]>('user.mock');
 const SCHEDULE_MOCK_TOKEN = new Token<Schedule[]>('schedule.mock');
+
+const USERS = [
+  {
+    id: '1',
+    name: 'Guilherme',
+    ref: '5345',
+  },
+];
 
 const TEAMS = [
   {
@@ -38,12 +50,21 @@ const SCHEDULES: Schedule[] = [
 
 register(
   {
+    for: USER_MOCK_TOKEN,
+    use: USERS,
+  },
+  {
     for: TEAM_MOCK_TOKEN,
     use: TEAMS,
   },
   {
     for: SCHEDULE_MOCK_TOKEN,
     use: SCHEDULES,
+  },
+  {
+    for: UserRepository,
+    use: UserMockRepositoryImpl,
+    add: [USER_MOCK_TOKEN],
   },
   {
     for: TeamRepository,
