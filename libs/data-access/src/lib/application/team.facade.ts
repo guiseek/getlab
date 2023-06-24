@@ -13,6 +13,7 @@ import { Store } from '../base/store';
 interface TeamState {
   data: Team[];
   team: Team | null;
+  error: string | null;
   loading: boolean;
 }
 
@@ -34,33 +35,48 @@ export class TeamFacade extends Store<TeamState> {
     super({
       data: [],
       team: null,
+      error: null,
       loading: false,
     });
   }
 
   load() {
-    this.findAllUseCase.execute().then((data) => this.setState({ data }));
+    this.catch(
+      this.findAllUseCase.execute().then((data) => this.setState({ data }))
+    );
   }
 
   findTeam(id: string) {
-    this.findOneUseCase.execute(id).then((team) => this.setState({ team }));
+    this.catch(
+      this.findOneUseCase.execute(id).then((team) => this.setState({ team }))
+    );
   }
 
   createTeam(team: CreateTeamDto) {
-    this.createUseCase.execute(team).then(() => {
-      this.setState({ team: null });
-      this.load();
-    });
+    this.catch(
+      this.createUseCase.execute(team).then(() => {
+        this.setState({ team: null });
+        this.load();
+      })
+    );
   }
 
   updateTeam(team: UpdateTeamDto) {
-    this.updateUseCase.execute(team).then(() => {
-      this.setState({ team: null });
-      this.load();
-    });
+    this.catch(
+      this.updateUseCase.execute(team).then(() => {
+        this.setState({ team: null });
+        this.load();
+      })
+    );
   }
 
   removeTeam(id: string) {
-    this.removeByIdUseCase.execute(id).then(() => this.load());
+    this.catch(this.removeByIdUseCase.execute(id).then(() => this.load()));
+  }
+
+  catch<T extends Promise<unknown>>(promise: T) {
+    promise.catch((error) => {
+      this.setState({ error: error.message });
+    });
   }
 }
