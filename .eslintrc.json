@@ -13,8 +13,12 @@
             "allow": [],
             "depConstraints": [
               {
+                "sourceTag": "type:app",
+                "onlyDependOnLibsWithTags": ["type:feature", "type:data-access"]
+              },
+              {
                 "sourceTag": "type:data-access",
-                "onlyDependOnLibsWithTags": ["type:util", "type:data-access"]
+                "onlyDependOnLibsWithTags": ["type:util", "type:domain"]
               },
               {
                 "sourceTag": "type:shell",
