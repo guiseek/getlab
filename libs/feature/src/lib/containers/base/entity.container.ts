@@ -1,14 +1,8 @@
-import {
-  inject,
-  Directive,
-  ElementRef,
-  ViewChild,
-  DestroyRef,
-} from '@angular/core';
+import { inject, Directive, ViewChild, DestroyRef } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatButton } from '@angular/material/button';
-import { EntityForm } from './entity.form';
+import { FormGroupDirective } from '@angular/forms';
 import { Router } from '@angular/router';
+import { EntityForm } from './entity.form';
 
 /**
  * @description
@@ -24,36 +18,23 @@ export abstract class EntityContainer<
   C = unknown,
   U = unknown
 > {
+  @ViewChild(FormGroupDirective, { static: true })
+  private formGroup!: FormGroupDirective;
+
+  protected router = inject(Router);
+  protected snackBar = inject(MatSnackBar);
   protected destroyRef = inject(DestroyRef);
 
   protected label = 'Registro';
 
-  @ViewChild('resetRef', { static: true })
-  resetButton!: MatButton;
-  get resetRef() {
-    return this.resetButton._elementRef;
-  }
-
-  @ViewChild('formRef', { static: true })
-  formRef!: ElementRef<HTMLFormElement>;
-  get formEl() {
-    return this.formRef.nativeElement;
-  }
-
-  @ViewChild('sectionRef', { static: true })
-  sectionRef!: ElementRef<HTMLElement>;
-  get sectionEl() {
-    return this.sectionRef.nativeElement;
-  }
-
   abstract form: EntityForm<T, C, U>;
-
-  snackBar = inject(MatSnackBar);
-  private router = inject(Router);
+  abstract onRemove(entity: T): void;
+  abstract create(updateDto: C): void;
+  abstract update(updateDto: U): void;
 
   onSubmit(path: string) {
     if (this.form.valid) {
-      let message;
+      let message: string;
 
       if (this.form.hasId) {
         this.update(this.form.getValue());
@@ -63,27 +44,19 @@ export abstract class EntityContainer<
         message = `${this.label} cadastrado(a)`;
       }
 
-      this.snackBar.open(`${message} com sucesso`, 'OK', {
+      message = `${message} com sucesso`;
+
+      this.snackBar.open(message, 'OK', {
         duration: 3000,
       });
 
-      this.resetRef.nativeElement.click();
-      this.form.init();
+      this.formGroup.resetForm();
 
-      const url = ['/', path];
-      this.router.navigate(url);
-
-      this.sectionEl.scrollIntoView({
-        behavior: 'smooth',
-      });
+      this.router.navigate(['/', path]);
     } else {
       this.form.markAllAsTouched();
     }
   }
-
-  abstract onRemove(entity: T): void;
-  abstract create(updateDto: C): void;
-  abstract update(updateDto: U): void;
 
   protected compareFn(e1: T, e2: T) {
     if (e1 && 'id' in e1 && e2 && 'id' in e2) {

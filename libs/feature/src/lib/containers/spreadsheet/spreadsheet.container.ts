@@ -1,14 +1,14 @@
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map, shareReplay } from 'rxjs';
 import { SpreadsheetForm } from '../../forms';
+import { getColumns } from '../shared';
+import { filter } from 'rxjs';
 import {
   Schedule,
   ScheduleFacade,
   SpreadsheetFacade,
 } from '@getlab/data-access';
-import { isBreakpoint } from '../shared';
 
 @Component({
   selector: 'getlab-spreadsheet',
@@ -19,18 +19,15 @@ export class SpreadsheetContainer implements OnInit {
   protected destroyRef = inject(DestroyRef);
   protected router = inject(Router);
   protected route = inject(ActivatedRoute);
+
   scheduleFacade = inject(ScheduleFacade);
   spreadsheetFacade = inject(SpreadsheetFacade);
 
   readonly spreadsheetForm = new SpreadsheetForm();
 
-  columns$ = isBreakpoint('Handset').pipe(
-    map((match) =>
-      match
-        ? ['date', 'time', 'ref']
-        : ['date', 'time', 'ref', 'people', 'goal']
-    ),
-    shareReplay()
+  columns$ = getColumns(
+    ['date', 'time', 'ref', 'people', 'goal'],
+    ['date', 'time', 'ref']
   );
 
   get schedules() {
@@ -39,6 +36,7 @@ export class SpreadsheetContainer implements OnInit {
 
   ngOnInit() {
     this.spreadsheetFacade.clear();
+
     this.scheduleFacade.load();
 
     this.route.queryParams
@@ -63,7 +61,10 @@ export class SpreadsheetContainer implements OnInit {
       });
 
     this.spreadsheetFacade.data$
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        filter((data) => data !== undefined)
+      )
       .subscribe((data) => {
         this.spreadsheetFacade.parse(data);
       });

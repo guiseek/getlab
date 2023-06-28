@@ -8,11 +8,11 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map, shareReplay } from 'rxjs';
 import { ConfirmDialog } from '../../components';
 import { ScheduleForm } from '../../forms';
 import { EntityContainer } from '../base';
-import { isBreakpoint } from '../shared';
+import { getColumns } from '../shared';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'getlab-schedule',
@@ -31,33 +31,26 @@ export class ScheduleContainer
   teamFacade = inject(TeamFacade);
   route = inject(ActivatedRoute);
 
-  columns$ = isBreakpoint('Handset').pipe(
-    map((match) =>
-      match
-        ? ['time', 'team', 'update', 'remove']
-        : ['time', 'byweekday', 'team', 'update', 'remove']
-    ),
-    shareReplay()
+  columns$ = getColumns(
+    ['time', 'byweekday', 'team', 'update', 'remove'],
+    ['time', 'team', 'update', 'remove']
   );
 
   ngOnInit() {
     this.form.onInit();
+
     this.scheduleFacade.load();
     this.teamFacade.load();
 
     this.scheduleFacade.schedule$
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((schedule) => {
-        if (schedule) {
-          this.form.patchValue(schedule);
-          this.formEl.scrollIntoView({
-            behavior: 'smooth',
-          });
-        }
-      });
+      .subscribe((value) => this.form.patchValue(value ?? {}));
 
     this.route.params
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        filter((params) => 'id' in params)
+      )
       .subscribe(({ id }) => {
         if (id) this.scheduleFacade.findSchedule(id);
       });
