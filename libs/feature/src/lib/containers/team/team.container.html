@@ -2,7 +2,7 @@
   <h2>Turmas</h2>
 </mat-toolbar>
 
-<section #sectionRef class="row">
+<section class="row">
   <mat-card class="col min-300 overflow-hidden">
     <table mat-table [dataSource]="teamFacade.data$">
       <ng-container matColumnDef="id">
@@ -43,7 +43,6 @@
   </mat-card>
 
   <form
-    #formRef
     novalidate
     [formGroup]="form"
     class="col min-300"
@@ -111,7 +110,7 @@
       </mat-card-content>
       <mat-card-actions class="flex row-reverse space-between">
         <button mat-raised-button color="accent" type="submit">Salvar</button>
-        <button mat-raised-button #resetRef type="reset">Limpar</button>
+        <button mat-raised-button type="reset">Limpar</button>
       </mat-card-actions>
     </mat-card>
   </form>
