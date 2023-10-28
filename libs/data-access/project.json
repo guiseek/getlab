@@ -11,11 +11,12 @@
         "outputPath": "dist/libs/data-access",
         "main": "libs/data-access/src/index.ts",
         "tsConfig": "libs/data-access/tsconfig.lib.json",
-        "assets": []
+        "assets": [],
+        "updateBuildableProjectDepsInPackageJson": true
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["libs/data-access/**/*.ts"]
