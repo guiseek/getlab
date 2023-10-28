@@ -11,11 +11,12 @@
         "outputPath": "dist/libs/domain",
         "main": "libs/domain/src/index.ts",
         "tsConfig": "libs/domain/tsconfig.lib.json",
-        "assets": []
+        "assets": [],
+        "updateBuildableProjectDepsInPackageJson": true
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["libs/domain/**/*.ts"]
